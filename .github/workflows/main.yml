@@ -2,7 +2,7 @@ name: Main branch push or pull request - Create the image and deploy to Google C
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "test" ]
   pull_request:
     branches: [ "main" ]
 
@@ -69,7 +69,7 @@ jobs:
         if: success()
         run: |
           gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
-          gcloud run deploy bestmovies-webapi \ 
+          gcloud run deploy bestmovies--webapi \ 
             --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/bestmovies-webapi:latest \
             --platform managed \
             --region europe-west1 \
