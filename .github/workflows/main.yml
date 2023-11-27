@@ -74,5 +74,5 @@ jobs:
             --platform managed \
             --region europe-west1 \
             --allow-unauthenticated \
-            --service-account nepalghi@gmail.com
+            --service-account sachin@bestmovies-406414.iam.gserviceaccount.com
             
