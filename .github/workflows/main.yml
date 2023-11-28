@@ -1,9 +1,7 @@
 name: Main branch push or pull request - Create the image and deploy to Google Cloud
-                  #Retrigger
+
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
     branches: [ "main" ]
 
 jobs:
