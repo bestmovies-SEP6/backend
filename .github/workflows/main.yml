@@ -69,5 +69,5 @@ jobs:
         if: success()
         run: |
           gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
-          gcloud run deploy bestmovies--webapi --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/bestmovies-webapi:latest --platform managed --region europe-west1 --allow-unauthenticated --service-account sachin@bestmovies-406414.iam.gserviceaccount.com
+          gcloud run deploy bestmovies-api --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/bestmovies-webapi:latest --platform managed --region europe-west1 --allow-unauthenticated --service-account sachin@bestmovies-406414.iam.gserviceaccount.com
             
