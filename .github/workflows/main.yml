@@ -2,7 +2,7 @@ name: Main branch push or pull request - Create the image and deploy to Google C
                   #Retrigger
 on:
   push:
-    branches: [ "test" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
