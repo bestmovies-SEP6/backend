@@ -3,8 +3,6 @@ name: Main branch push or pull request - Create the image and deploy to Google C
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
   build-test-deploy:
