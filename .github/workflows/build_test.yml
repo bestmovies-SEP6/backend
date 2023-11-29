@@ -2,7 +2,8 @@ name: Main pull request - Build and run tests
 
 on:
   push:
-    branches: [ "main", ]
+    branches: 
+      - *
 
 jobs:
   build-test:
