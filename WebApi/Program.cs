@@ -1,11 +1,13 @@
 using System.Text;
+using ApiClient.api;
 using Data;
 using Data.dao;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Services;
+using Services.authentication;
+using Services.movie;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,9 +15,18 @@ var builder = WebApplication.CreateBuilder(args);
 string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseSqlServer(connectionString));
-builder.Services.AddScoped<IAuthService, AuthService>();
 
+// Services
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddMemoryCache();
+
+
+// DAOs
 builder.Services.AddScoped<IAuthDao, AuthDao>();
+
+// HttpClients
+builder.Services.AddScoped<IMovieClient, MovieHttpClient>();
 
 
 builder.Services.AddControllers();
@@ -32,7 +43,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidateAudience = true,
         ValidAudience = builder.Configuration["JWT:Audience"],
         ValidIssuer = builder.Configuration["JWT:Issuer"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecretKey"]))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecretKey"]!))
     };
 });
 

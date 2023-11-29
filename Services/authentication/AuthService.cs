@@ -2,7 +2,7 @@ using System.Text.RegularExpressions;
 using Data.dao;
 using Dto;
 
-namespace Services;
+namespace Services.authentication;
 
 public class AuthService : IAuthService {
     private readonly IAuthDao _authDao;

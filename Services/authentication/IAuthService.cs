@@ -1,6 +1,6 @@
 using Dto;
 
-namespace Services; 
+namespace Services.authentication; 
 
 public interface IAuthService {
     Task<UserDto> ValidateUser(LoginDto loginDto);

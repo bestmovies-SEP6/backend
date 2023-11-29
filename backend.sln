@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entity", "Entity\Entity.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{E88908E6-3C7F-4EC7-8F45-1DAD57F905B8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiClient", "ApiClient\ApiClient.csproj", "{FD287026-D62E-4360-A0EE-13F8CDA880B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{E88908E6-3C7F-4EC7-8F45-1DAD57F905B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E88908E6-3C7F-4EC7-8F45-1DAD57F905B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E88908E6-3C7F-4EC7-8F45-1DAD57F905B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD287026-D62E-4360-A0EE-13F8CDA880B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD287026-D62E-4360-A0EE-13F8CDA880B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD287026-D62E-4360-A0EE-13F8CDA880B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD287026-D62E-4360-A0EE-13F8CDA880B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
