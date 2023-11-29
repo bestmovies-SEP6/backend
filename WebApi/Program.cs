@@ -1,10 +1,11 @@
 using System.Text;
 using Data;
-using Data.Services;
+using Data.dao;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,8 @@ string? connectionString = builder.Configuration.GetConnectionString("DefaultCon
 builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.AddScoped<IAuthDao, AuthDao>();
 
 
 builder.Services.AddControllers();
