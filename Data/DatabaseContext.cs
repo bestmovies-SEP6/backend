@@ -1,4 +1,4 @@
-﻿using Data.Entities;
+﻿using Entity;
 using EntityFramework.Exceptions.SqlServer;
 using Microsoft.EntityFrameworkCore;
 
