@@ -3,7 +3,7 @@ name: Main pull request - Build and run tests
 on:
   push:
     branches: 
-      - *
+      - '**'
 
 jobs:
   build-test:
