@@ -1,5 +1,5 @@
 ﻿using Data.Entities;
-using EntityFramework.Exceptions.PostgreSQL;
+using EntityFramework.Exceptions.SqlServer;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data;

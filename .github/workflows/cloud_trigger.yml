@@ -1,7 +1,7 @@
-name: Main branch push  - Create the image and deploy to Google Cloud
+name: Trigger cloud deployment
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "cloud-trigger" ]
 
 jobs:
   build-test-deploy:
