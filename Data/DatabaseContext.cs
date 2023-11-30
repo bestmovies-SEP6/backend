@@ -23,12 +23,14 @@ public class DatabaseContext : DbContext {
         modelBuilder.Entity<WishListEntity>()
             .HasOne(w => w.User)
             .WithMany(u => u.WishLists)
-            .HasForeignKey(w => w.Username);
+            .HasForeignKey(w => w.Username)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<WishListEntity>()
             .HasOne(w => w.Movie)
             .WithMany(m => m.WishLists)
-            .HasForeignKey(w => w.MovieId);
+            .HasForeignKey(w => w.MovieId)
+            .OnDelete(DeleteBehavior.Cascade);
         base.OnModelCreating(modelBuilder);
     }
 }
