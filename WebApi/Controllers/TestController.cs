@@ -13,6 +13,7 @@ public class TestController : ControllerBase {
     public ActionResult GetAuthorized() {
         return Ok("Authorized");
     }
+
     //Example for conditional return type
     [HttpGet, Route("try")]
     public ActionResult Try2() {
