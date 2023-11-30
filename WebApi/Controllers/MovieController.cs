@@ -34,4 +34,30 @@ public class MovieController : ControllerBase {
             return StatusCode(500, e.Message);
         }
     }
+
+
+    [HttpGet, Route("popular")]
+    public async Task<ActionResult<List<MovieDto>>> GetPopular() {
+        try {
+            List<MovieDto> popular = await _movieService.GetPopular();
+            return Ok(popular);
+        }
+        catch (Exception e) {
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpGet, Route("top-rated")]
+    public async Task<ActionResult<List<MovieDto>>> GetTopRated() {
+        try {
+            List<MovieDto> topRated = await _movieService.GetTopRated();
+            return Ok(topRated);
+        }
+        catch (Exception e) {
+            return StatusCode(500, e.Message);
+        }
+    }
+
+  
+
 }

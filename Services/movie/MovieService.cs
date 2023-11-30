@@ -8,6 +8,8 @@ public class MovieService : IMovieService {
     private IMemoryCache _cache;
     private const string NowPlayingCacheKey = "NowPlayingData";
     private const string TrendingCacheKey = "TrendingData";
+    private const string PopularCacheKey = "PopularData";
+    private const string TopRatedCacheKey = "TopRatedData";
     private IMovieClient _movieClient;
 
 
@@ -59,6 +61,44 @@ public class MovieService : IMovieService {
         return GetValueFromCache<Tuple<List<MovieDto>, DateOnly>>(TrendingCacheKey)!.Item1;
     }
 
+    public async Task<List<MovieDto>> GetPopular() {
+        Tuple<List<MovieDto>, DateOnly>? popularFromCache =
+            GetValueFromCache<Tuple<List<MovieDto>, DateOnly>>(PopularCacheKey);
+        if (popularFromCache is null) {
+            await RefreshPopularCache();
+        }
+        else {
+            DateOnly today = DateOnly.FromDateTime(DateTime.Now);
+            List<MovieDto> trendingMovies = popularFromCache!.Item1;
+            DateOnly lastUpdatedDate = popularFromCache!.Item2;
+
+            if (!trendingMovies.Any() || lastUpdatedDate != today) {
+                await RefreshPopularCache();
+            }
+        }
+
+        return GetValueFromCache<Tuple<List<MovieDto>, DateOnly>>(PopularCacheKey)!.Item1;
+    }
+
+    public async Task<List<MovieDto>> GetTopRated() {
+        Tuple<List<MovieDto>, DateOnly>? topRatedFromCache =
+            GetValueFromCache<Tuple<List<MovieDto>, DateOnly>>(TopRatedCacheKey);
+        if (topRatedFromCache is null) {
+            await RefreshTopRatedCache();
+        }
+        else {
+            DateOnly today = DateOnly.FromDateTime(DateTime.Now);
+            List<MovieDto> trendingMovies = topRatedFromCache!.Item1;
+            DateOnly lastUpdatedDate = topRatedFromCache!.Item2;
+
+            if (!trendingMovies.Any() || lastUpdatedDate != today) {
+                await RefreshTopRatedCache();
+            }
+        }
+
+        return GetValueFromCache<Tuple<List<MovieDto>, DateOnly>>(TopRatedCacheKey)!.Item1;
+    }
+
     // Get value from the cache
     private T? GetValueFromCache<T>(string cacheKey) {
         _cache.TryGetValue(cacheKey, out T? valueFromCache);
@@ -75,11 +115,29 @@ public class MovieService : IMovieService {
     }
 
     private async Task RefreshTrendingCache() {
-        Console.WriteLine("Fetching trending playing movies from api");
+        Console.WriteLine("Fetching trending movies from api");
         List<MovieDto> trending = await _movieClient.GetTrending();
         DateOnly today = DateOnly.FromDateTime(DateTime.Now);
 
         var dataToCache = new Tuple<List<MovieDto>, DateOnly>(trending, today);
         _cache.Set(TrendingCacheKey, dataToCache);
+    }
+
+    private async Task RefreshPopularCache() {
+        Console.WriteLine("Fetching popular movies from api");
+        List<MovieDto> popular = await _movieClient.GetPopular();
+        DateOnly today = DateOnly.FromDateTime(DateTime.Now);
+
+        var dataToCache = new Tuple<List<MovieDto>, DateOnly>(popular, today);
+        _cache.Set(PopularCacheKey, dataToCache);
+    }
+
+    private async Task RefreshTopRatedCache() {
+        Console.WriteLine("Fetching top rated movies from api");
+        List<MovieDto> topRated = await _movieClient.GetTopRated();
+        DateOnly today = DateOnly.FromDateTime(DateTime.Now);
+
+        var dataToCache = new Tuple<List<MovieDto>, DateOnly>(topRated, today);
+        _cache.Set(TopRatedCacheKey, dataToCache);
     }
 }

@@ -8,7 +8,7 @@ public class MovieDto {
     public int Id { get; set; }
 
     [JsonPropertyName("title")]
-    public string Title{ get; set; }
+    public string? Title{ get; set; }
 
     [JsonPropertyName("poster_path")]
     public string PosterPath { get; set; }
