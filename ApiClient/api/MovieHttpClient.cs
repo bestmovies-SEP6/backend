@@ -49,6 +49,7 @@ public class MovieHttpClient : IMovieClient {
         foreach (MovieDto result in filteredList) {
             result.PosterPath = $"https://image.tmdb.org/t/p/original{result.PosterPath}";
             result.VoteAverage = result.VoteAverage / 2;
+            result.BackDropPath = $"https://image.tmdb.org/t/p/original{result.BackDropPath}";
         }
 
         return filteredList;
