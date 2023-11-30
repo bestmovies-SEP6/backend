@@ -1,13 +1,16 @@
 using System.Text;
 using ApiClient.api;
 using Data;
-using Data.dao;
+using Data.dao.authentication;
+using Data.dao.movies;
+using Data.dao.wishList;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Services.authentication;
 using Services.movie;
+using Services.wishlist;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,11 +22,14 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 // Services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddScoped<IWIshListService, WishListService>();
 builder.Services.AddMemoryCache();
 
 
 // DAOs
 builder.Services.AddScoped<IAuthDao, AuthDao>();
+builder.Services.AddScoped<IWishListDao, WishListDao>();
+builder.Services.AddScoped<IMovieDao, MovieDao>();
 
 // HttpClients
 builder.Services.AddScoped<IMovieClient, MovieHttpClient>();
