@@ -4,7 +4,7 @@ using Entity;
 using EntityFramework.Exceptions.Common;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace Data.dao;
+namespace Data.dao.authentication;
 
 public class AuthDao : IAuthDao {
     private readonly DatabaseContext _databaseContext;

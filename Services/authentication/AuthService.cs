@@ -1,5 +1,5 @@
 using System.Text.RegularExpressions;
-using Data.dao;
+using Data.dao.authentication;
 using Dto;
 
 namespace Services.authentication;
