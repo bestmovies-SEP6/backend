@@ -16,7 +16,4 @@ public static class ErrorMessages {
 
     // Wishlist errors
     public const string MovieAlreadyInWishlist = "You already have this movie in your wishlist";
-  
-
-
 }
