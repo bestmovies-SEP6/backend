@@ -13,6 +13,18 @@ public class MovieController : ControllerBase {
         _movieService = movieService;
     }
 
+    [HttpGet, Route("details/{id}")]
+    public async Task<ActionResult<MovieDetailsDto>> GetMovieDetailsById([FromRoute] int id) {
+        try {
+            MovieDetailsDto movieDetailsDto = await _movieService.GetMovieDetailsById(id);
+            return Ok(movieDetailsDto);
+        }
+        catch (Exception e) {
+            return StatusCode(500, e.Message);
+        }
+
+    }
+
     [HttpGet, Route("now-playing")]
     public async Task<ActionResult<List<MovieDto>>> GetNowPlaying() {
         try {
