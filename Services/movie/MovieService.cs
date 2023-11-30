@@ -6,7 +6,7 @@ namespace Services.movie;
 
 public class MovieService : IMovieService {
     private IMemoryCache _cache;
-    private const string CacheKey = "NowPlayingData";
+    private const string NowPlayingCacheKey = "NowPlayingData";
     private IMovieClient _movieClient;
 
 
@@ -42,7 +42,7 @@ public class MovieService : IMovieService {
     // Get value from the cache
     private Tuple<List<MovieDto>, DateOnly>? GetValuesFromCache() {
         Tuple<List<MovieDto>, DateOnly>? moviesAndLastUpdated;
-        bool gotValue = _cache.TryGetValue(CacheKey, out moviesAndLastUpdated);
+        bool gotValue = _cache.TryGetValue(NowPlayingCacheKey, out moviesAndLastUpdated);
 
         if (!gotValue || moviesAndLastUpdated is null) {
             return null;
@@ -52,10 +52,12 @@ public class MovieService : IMovieService {
     }
 
     private async Task RefreshNowPlayingCache() {
+
+        Console.WriteLine("Fetching now playing movies from api");
         List<MovieDto> nowPlaying = await _movieClient.GetNowPlaying();
         DateOnly today = DateOnly.FromDateTime(DateTime.Now);
 
         var dataToCache = new Tuple<List<MovieDto>, DateOnly>(nowPlaying, today);
-        _cache.Set(CacheKey, dataToCache);
+        _cache.Set(NowPlayingCacheKey, dataToCache);
     }
 }

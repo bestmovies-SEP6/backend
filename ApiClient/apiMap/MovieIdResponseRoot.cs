@@ -1,8 +1,9 @@
 using System.Text.Json.Serialization;
+using Dto;
 
 namespace ApiClient.apiMap; 
 
-public class MovieIdResponse {
+public class MovieIdResponseRoot {
     [JsonPropertyName("results")]
-    public List<MovieId>? Results { get; set; }
+    public List<MovieDto>? Results { get; set; }
 }
