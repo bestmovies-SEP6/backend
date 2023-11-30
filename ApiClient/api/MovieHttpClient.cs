@@ -9,6 +9,11 @@ namespace ApiClient.api;
 public class MovieHttpClient : IMovieClient {
     private const string URL = "https://api.themoviedb.org/3";
 
+    public async Task<MovieDetailsDto> GetMovieDetailsById(int id) {
+        MovieDetailsDto movieDetails = await HttpClientUtil.Get<MovieDetailsDto>($"{URL}/movie/{id}");
+        return ConvertMovieDetails(movieDetails);
+    }
+
     public async Task<List<MovieDto>> GetNowPlaying() {
         MovieIdResponseRoot rootObject =
             await HttpClientUtil.Get<MovieIdResponseRoot>($"{URL}/movie/now_playing");
@@ -47,5 +52,16 @@ public class MovieHttpClient : IMovieClient {
         }
 
         return filteredList;
+    }
+
+    private MovieDetailsDto ConvertMovieDetails(MovieDetailsDto movieDetails) {
+        movieDetails.PosterPath = $"https://image.tmdb.org/t/p/original{movieDetails.PosterPath}";
+        movieDetails.VoteAverage = movieDetails.VoteAverage / 2;
+
+        foreach (var company in movieDetails.ProductionCompanies) {
+            company.LogoPath = $"https://image.tmdb.org/t/p/original{company.LogoPath}";
+        }
+
+        return movieDetails;
     }
 }

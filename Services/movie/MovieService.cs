@@ -18,6 +18,10 @@ public class MovieService : IMovieService {
         _cache = cache;
     }
 
+    public Task<MovieDetailsDto> GetMovieDetailsById(int id) {
+        return _movieClient.GetMovieDetailsById(id);
+    }
+
     public async Task<List<MovieDto>> GetNowPlaying() {
         // Try to get the cached now playing movies
         Tuple<List<MovieDto>, DateOnly>? nowPlayingFromCache =
@@ -98,6 +102,8 @@ public class MovieService : IMovieService {
 
         return GetValueFromCache<Tuple<List<MovieDto>, DateOnly>>(TopRatedCacheKey)!.Item1;
     }
+
+
 
     // Get value from the cache
     private T? GetValueFromCache<T>(string cacheKey) {
