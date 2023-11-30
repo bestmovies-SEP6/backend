@@ -15,4 +15,7 @@ public class MovieDto {
 
     [JsonPropertyName("release_date")]
     public string ReleaseDate { get; set; }
+
+    [JsonPropertyName("vote_average")]
+    public double VoteAverage { get; set; }
 }
