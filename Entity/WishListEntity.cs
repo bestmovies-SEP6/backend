@@ -15,5 +15,6 @@ public class WishListEntity {
 
     public MovieEntity Movie { get; set; }
 
+
     public DateTime WishListedAt { get; set; }
 }
