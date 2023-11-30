@@ -6,6 +6,5 @@ public class WishListEntity {
     public string Username { get; set; }
     public UserEntity User { get; set; }
     public MovieEntity Movie { get; set; }
-
     public DateTime WishListedAt { get; set; }
 }
