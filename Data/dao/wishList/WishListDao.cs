@@ -35,4 +35,13 @@ public class WishListDao : IWishListDao {
             throw;
         }
     }
+
+    public async Task<List<int>> GetAllWishListedMovies(string username) {
+        List<int> movieIds = await _databaseContext.WishLists
+            .Where(wishListEntity => wishListEntity.Username == username)
+            .Select(wishListEntity => wishListEntity.MovieId)
+            .ToListAsync();
+
+        return movieIds;
+    }
 }
