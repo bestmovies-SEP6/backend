@@ -16,6 +16,9 @@ public static class ReviewConverter {
         };
     }
 
+    public static List<ReviewDto> ToDtoList(List<ReviewEntity> reviewEntities) {
+        return reviewEntities.Select(ToDto).ToList();
+    }
     public static ReviewDto ToDto(ReviewEntity reviewEntity) {
         return new ReviewDto() {
             Author = reviewEntity.Author,
@@ -25,5 +28,7 @@ public static class ReviewConverter {
             ReviewDescription = reviewEntity.ReviewDescription
         };
     }
+
+   
     
 }

@@ -6,7 +6,6 @@ using Services.reviews;
 namespace WebApi.Controllers;
 
 [ApiController]
-[Authorize]
 [Route("[controller]")]
 public class ReviewsController : ControllerBase {
     private readonly IReviewsService _reviewsService;
@@ -16,12 +15,24 @@ public class ReviewsController : ControllerBase {
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult> AddReview([FromBody] ReviewDto reviewDto) {
         try {
             string loggedInUser = GetLoggedInUser();
             reviewDto.Author = loggedInUser;
             await _reviewsService.AddReview(reviewDto);
             return Ok();
+        }
+        catch (Exception e) {
+            return StatusCode(500, e.Message);
+        }
+    }
+
+    [HttpGet, Route("{movieId}")]
+    public async Task<ActionResult<List<ReviewDto>>> GetReviewsByMovieId([FromRoute] int movieId) {
+        try {
+            List<ReviewDto> reviewDtos = await _reviewsService.GetReviewsByMovieId(movieId);
+            return Ok(reviewDtos);
         }
         catch (Exception e) {
             return StatusCode(500, e.Message);
