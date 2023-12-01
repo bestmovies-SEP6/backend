@@ -1,3 +1,4 @@
+using System.Collections;
 using System.ComponentModel.DataAnnotations;
 
 namespace Entity; 
@@ -10,4 +11,5 @@ public class UserEntity {
     public string Email { get; set; }
 
     public ICollection<WishListEntity>? WishLists { get; set; }
+    public ICollection<ReviewEntity>? Reviews { get; set; }
 }

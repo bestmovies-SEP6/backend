@@ -4,22 +4,22 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Services.movie;
 
-public class MovieService : IMovieService {
+public class MoviesService : IMoviesService {
     private IMemoryCache _cache;
     private const string NowPlayingCacheKey = "NowPlayingData";
     private const string TrendingCacheKey = "TrendingData";
     private const string PopularCacheKey = "PopularData";
     private const string TopRatedCacheKey = "TopRatedData";
-    private IMovieClient _movieClient;
+    private IMoviesClient _moviesClient;
 
 
-    public MovieService(IMovieClient movieClient, IMemoryCache cache) {
-        _movieClient = movieClient;
+    public MoviesService(IMoviesClient moviesClient, IMemoryCache cache) {
+        _moviesClient = moviesClient;
         _cache = cache;
     }
 
     public Task<MovieDetailsDto> GetMovieDetailsById(int id) {
-        return _movieClient.GetMovieDetailsById(id);
+        return _moviesClient.GetMovieDetailsById(id);
     }
 
     public async Task<List<MovieDto>> GetNowPlaying() {
@@ -113,7 +113,7 @@ public class MovieService : IMovieService {
 
     private async Task RefreshNowPlayingCache() {
         Console.WriteLine("Fetching now playing movies from api");
-        List<MovieDto> nowPlaying = await _movieClient.GetNowPlaying();
+        List<MovieDto> nowPlaying = await _moviesClient.GetNowPlaying();
         DateOnly today = DateOnly.FromDateTime(DateTime.Now);
 
         var dataToCache = new Tuple<List<MovieDto>, DateOnly>(nowPlaying, today);
@@ -122,7 +122,7 @@ public class MovieService : IMovieService {
 
     private async Task RefreshTrendingCache() {
         Console.WriteLine("Fetching trending movies from api");
-        List<MovieDto> trending = await _movieClient.GetTrending();
+        List<MovieDto> trending = await _moviesClient.GetTrending();
         DateOnly today = DateOnly.FromDateTime(DateTime.Now);
 
         var dataToCache = new Tuple<List<MovieDto>, DateOnly>(trending, today);
@@ -131,7 +131,7 @@ public class MovieService : IMovieService {
 
     private async Task RefreshPopularCache() {
         Console.WriteLine("Fetching popular movies from api");
-        List<MovieDto> popular = await _movieClient.GetPopular();
+        List<MovieDto> popular = await _moviesClient.GetPopular();
         DateOnly today = DateOnly.FromDateTime(DateTime.Now);
 
         var dataToCache = new Tuple<List<MovieDto>, DateOnly>(popular, today);
@@ -140,7 +140,7 @@ public class MovieService : IMovieService {
 
     private async Task RefreshTopRatedCache() {
         Console.WriteLine("Fetching top rated movies from api");
-        List<MovieDto> topRated = await _movieClient.GetTopRated();
+        List<MovieDto> topRated = await _moviesClient.GetTopRated();
         DateOnly today = DateOnly.FromDateTime(DateTime.Now);
 
         var dataToCache = new Tuple<List<MovieDto>, DateOnly>(topRated, today);

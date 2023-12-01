@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Data.dao.wishList;
 
-public class WishListDao : IWishListDao {
+public class WishListsDao : IWishListsDao {
     private readonly DatabaseContext _databaseContext;
 
-    public WishListDao(DatabaseContext databaseContext) {
+    public WishListsDao(DatabaseContext databaseContext) {
         _databaseContext = databaseContext;
     }
 

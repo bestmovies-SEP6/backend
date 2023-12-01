@@ -6,7 +6,7 @@ using Dto;
 
 namespace ApiClient.api;
 
-public class MovieHttpClient : IMovieClient {
+public class MoviesHttpClient : IMoviesClient {
     private const string URL = "https://api.themoviedb.org/3";
 
     public async Task<MovieDetailsDto> GetMovieDetailsById(int id) {

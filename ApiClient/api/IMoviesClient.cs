@@ -1,8 +1,8 @@
 using Dto;
 
-namespace Services.movie; 
+namespace ApiClient.api; 
 
-public interface IMovieService {
+public interface IMoviesClient {
     Task<MovieDetailsDto> GetMovieDetailsById(int id);
     Task<List<MovieDto>> GetNowPlaying();
     Task<List<MovieDto>> GetTrending();

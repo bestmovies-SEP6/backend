@@ -9,6 +9,8 @@ public class DatabaseContext : DbContext {
     public DbSet<MovieEntity> Movies { get; set; }
     public DbSet<WishListEntity> WishLists { get; set; }
 
+    public DbSet<ReviewEntity> Reviews { get; set; }
+
     public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options) {
 
     }
@@ -20,6 +22,11 @@ public class DatabaseContext : DbContext {
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         modelBuilder.Entity<WishListEntity>().HasKey(entity => new {entity.MovieId, entity.Username});
+        modelBuilder.Entity<ReviewEntity>().HasKey(entity => new {entity.MovieId, entity.Author});
+
+
+
+        // Building WishListEntity
         modelBuilder.Entity<WishListEntity>()
             .HasOne(w => w.User)
             .WithMany(u => u.WishLists)
@@ -31,6 +38,24 @@ public class DatabaseContext : DbContext {
             .WithMany(m => m.WishLists)
             .HasForeignKey(w => w.MovieId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        
+
+        // Building ReviewEntity
+        modelBuilder.Entity<ReviewEntity>()
+            .HasOne(r => r.User)
+            .WithMany(u => u.Reviews)
+            .HasForeignKey(r => r.Author)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<ReviewEntity>()
+            .HasOne(r => r.Movie)
+            .WithMany(m => m.Reviews)
+            .HasForeignKey(r => r.MovieId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+
+
         base.OnModelCreating(modelBuilder);
     }
 }
