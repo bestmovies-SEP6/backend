@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 namespace Data.dao.reviews;
 
 public class ReviewsDao : IReviewsDao {
-    private DatabaseContext _databaseContext;
+    private readonly DatabaseContext _databaseContext;
 
     public ReviewsDao(DatabaseContext databaseContext) {
         _databaseContext = databaseContext;
@@ -34,5 +34,12 @@ public class ReviewsDao : IReviewsDao {
             .Where(reviewEntity => reviewEntity.MovieId == movieId)
             .ToListAsync();
         return ReviewConverter.ToDtoList(reviewEntities);
+    }
+
+    public async Task<double> GetAverageRatingByMovieId(int movieId) {
+        return await _databaseContext.Reviews
+            .Where(reviewEntity => reviewEntity.MovieId == movieId)
+            .Select(entity => entity.Rating)
+            .AverageAsync();
     }
 }
