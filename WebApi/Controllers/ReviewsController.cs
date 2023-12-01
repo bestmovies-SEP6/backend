@@ -39,6 +39,17 @@ public class ReviewsController : ControllerBase {
         }
     }
 
+    [HttpGet, Route("average-rating/{movieId}")]
+    public async Task<ActionResult<double>> GetAverageRatingByMovieId([FromRoute] int movieId) {
+        try {
+            double averageRating = await _reviewsService.GetAverageRatingByMovieId(movieId);
+            return Ok(averageRating);
+        }
+        catch (Exception e) {
+            return StatusCode(500, e.Message);
+        }
+    }
+
     private string GetLoggedInUser() {
         string? loggedInUser = User.Identity!.Name;
         if (string.IsNullOrEmpty(loggedInUser))

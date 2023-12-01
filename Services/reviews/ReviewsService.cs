@@ -22,4 +22,9 @@ public class ReviewsService : IReviewsService {
         await _moviesDao.AddIfNotExists(movieId);
         return await _reviewsDao.GetReviewsByMovieId(movieId);
     }
+
+    public async Task<double> GetAverageRatingByMovieId(int movieId) {
+        await _moviesDao.AddIfNotExists(movieId);
+        return await _reviewsDao.GetAverageRatingByMovieId(movieId);
+    }
 }
