@@ -7,16 +7,16 @@ namespace WebApi.Controllers;
 [ApiController]
 [Route("[controller]")]
 public class MoviesController : ControllerBase {
-    private readonly IMovieService _movieService;
+    private readonly IMoviesService _moviesService;
 
-    public MoviesController(IMovieService movieService) {
-        _movieService = movieService;
+    public MoviesController(IMoviesService moviesService) {
+        _moviesService = moviesService;
     }
 
     [HttpGet, Route("details/{id}")]
     public async Task<ActionResult<MovieDetailsDto>> GetMovieDetailsById([FromRoute] int id) {
         try {
-            MovieDetailsDto movieDetailsDto = await _movieService.GetMovieDetailsById(id);
+            MovieDetailsDto movieDetailsDto = await _moviesService.GetMovieDetailsById(id);
             return Ok(movieDetailsDto);
         }
         catch (Exception e) {
@@ -28,7 +28,7 @@ public class MoviesController : ControllerBase {
     [HttpGet, Route("now-playing")]
     public async Task<ActionResult<List<MovieDto>>> GetNowPlaying() {
         try {
-            List<MovieDto> nowPlayings = await _movieService.GetNowPlaying();
+            List<MovieDto> nowPlayings = await _moviesService.GetNowPlaying();
             return Ok(nowPlayings);
         }
         catch (Exception e) {
@@ -39,7 +39,7 @@ public class MoviesController : ControllerBase {
     [HttpGet, Route("trending")]
     public async Task<ActionResult<List<MovieDto>>> GetTrending() {
         try {
-            List<MovieDto> trendings = await _movieService.GetTrending();
+            List<MovieDto> trendings = await _moviesService.GetTrending();
             return Ok(trendings);
         }
         catch (Exception e) {
@@ -51,7 +51,7 @@ public class MoviesController : ControllerBase {
     [HttpGet, Route("popular")]
     public async Task<ActionResult<List<MovieDto>>> GetPopular() {
         try {
-            List<MovieDto> popular = await _movieService.GetPopular();
+            List<MovieDto> popular = await _moviesService.GetPopular();
             return Ok(popular);
         }
         catch (Exception e) {
@@ -62,7 +62,7 @@ public class MoviesController : ControllerBase {
     [HttpGet, Route("top-rated")]
     public async Task<ActionResult<List<MovieDto>>> GetTopRated() {
         try {
-            List<MovieDto> topRated = await _movieService.GetTopRated();
+            List<MovieDto> topRated = await _moviesService.GetTopRated();
             return Ok(topRated);
         }
         catch (Exception e) {

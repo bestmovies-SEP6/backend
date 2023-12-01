@@ -1,5 +1,5 @@
 namespace Data.dao.movies; 
 
-public interface IMovieDao {
+public interface IMoviesDao {
     Task AddIfNotExists(int movieId);
 }

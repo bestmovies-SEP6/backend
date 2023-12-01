@@ -9,10 +9,10 @@ namespace WebApi.Controllers;
 [Authorize]
 [Route("[controller]")]
 public class WishListsController : ControllerBase {
-    private IWIshListService _wishListService;
+    private readonly IWIshListsService _wishListsService;
 
-    public WishListsController(IWIshListService wishListService) {
-        _wishListService = wishListService;
+    public WishListsController(IWIshListsService wishListsService) {
+        _wishListsService = wishListsService;
     }
 
     [HttpPost, Route("{movieId}")]
@@ -20,7 +20,7 @@ public class WishListsController : ControllerBase {
         try {
             string loggedInUser = GetLoggedInUser();
 
-            await _wishListService.AddMovieToWishList(loggedInUser, movieId);
+            await _wishListsService.AddMovieToWishList(loggedInUser, movieId);
             return Ok();
         }
         catch (Exception e) {
@@ -32,7 +32,7 @@ public class WishListsController : ControllerBase {
     public async Task<ActionResult<List<MovieDetailsDto>>> GetAllWishListedMovies() {
         try {
             string loggedInUser = GetLoggedInUser();
-            List<MovieDetailsDto> wishListedMovies = await _wishListService.GetAllWishListedMovies(loggedInUser);
+            List<MovieDetailsDto> wishListedMovies = await _wishListsService.GetAllWishListedMovies(loggedInUser);
             return Ok(wishListedMovies);
         }
         catch (Exception e) {

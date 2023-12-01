@@ -3,7 +3,7 @@ using Entity;
 
 namespace Data.converters;
 
-public class UserConverter {
+public static class UserConverter {
     public static UserDto ToDto(UserEntity userEntity) {
         return new UserDto() {
             Username = userEntity.Username,

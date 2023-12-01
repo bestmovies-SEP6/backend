@@ -4,10 +4,10 @@ using EntityFramework.Exceptions.Common;
 
 namespace Data.dao.movies;
 
-public class MovieDao : IMovieDao {
+public class MoviesDao : IMoviesDao {
     private readonly DatabaseContext _databaseContext;
 
-    public MovieDao(DatabaseContext databaseContext) {
+    public MoviesDao(DatabaseContext databaseContext) {
         _databaseContext = databaseContext;
     }
 
