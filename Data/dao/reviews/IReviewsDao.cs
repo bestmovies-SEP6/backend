@@ -4,4 +4,5 @@ namespace Data.dao.reviews;
 
 public interface IReviewsDao {
     Task AddReview( ReviewDto reviewDto);
+    Task<List<ReviewDto>> GetReviewsByMovieId(int movieId);
 }
