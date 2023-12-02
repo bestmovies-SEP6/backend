@@ -20,11 +20,12 @@ public class AuthController : ControllerBase {
     }
 
     [HttpPost, Route("login")]
-    public async Task<ActionResult<string>> Login([FromBody] LoginDto loginDto) {
+    public async Task<ActionResult<LoginResponseDto>> Login([FromBody] LoginDto loginDto) {
         try {
             UserDto userDto = await _authService.ValidateUser(loginDto);
             string token = GenerateJwt(userDto);
-            return Ok(token);
+            LoginResponseDto responseDto = new LoginResponseDto {JwtToken = token};
+            return Ok(responseDto);
         }
         catch (Exception e) {
             return BadRequest(e.Message);
@@ -57,7 +58,7 @@ public class AuthController : ControllerBase {
             _configuration["JWT:Audience"],
             claims,
             null,
-            DateTime.UtcNow.AddHours(2));
+            DateTime.Now.AddHours(2));
 
         JwtSecurityToken token = new JwtSecurityToken(header, payload);
         string serializedToken = new JwtSecurityTokenHandler().WriteToken(token);
