@@ -33,11 +33,12 @@ public class AuthController : ControllerBase {
     }
 
     [HttpPost, Route("register")]
-    public async Task<ActionResult<string>> Register([FromBody] UserDto userDto) {
+    public async Task<ActionResult<LoginResponseDto>> Register([FromBody] UserDto userDto) {
         try {
             UserDto registeredUser = await _authService.RegisterUser(userDto);
             string token = GenerateJwt(registeredUser);
-            return Ok(token);
+            LoginResponseDto responseDto = new LoginResponseDto {JwtToken = token};
+            return Ok(responseDto);
         }
         catch (Exception e) {
             return BadRequest(e.Message);
