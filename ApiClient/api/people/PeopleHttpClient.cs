@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using ApiClient.apiMap;
+﻿using ApiClient.apiMap;
 using ApiClient.util;
 using Dto;
 
@@ -18,32 +17,18 @@ public class PeopleHttpClient : IPeopleClient
 
     private List<PeopleDto> ConvertPeople(PeopleResponseRoot responseRoot)
     {
+
         if (responseRoot.Results is null) {
             throw new Exception("Something went wrong while fetching popular people from tmdb api");
         }
 
         var filteredList = responseRoot.Results.Where(people => people.Name is not null).ToList();
 
-        foreach (PeopleDto result in filteredList) 
-        {
-            result.ProfilePath = $"https://image.tmdb.org/t/p/original{result.ProfilePath}";   
-            List<KnownForDto> movieTitles = new List<KnownForDto>();
-
-            if (result.KnownForMovies != null)
-            {
-                foreach (var knownFor in result.KnownForMovies) 
-                {
-                    string title = knownFor.Title ?? knownFor.Name;
-                    if (!string.IsNullOrWhiteSpace(title))
-                    {
-                        movieTitles.Add(knownFor);
-                    }
-                }
-            }
-
-            result.KnownForMovies = movieTitles;
+        foreach (PeopleDto result in filteredList) {
+            result.ProfilePath = $"https://image.tmdb.org/t/p/original{result.ProfilePath}";
         }
 
         return filteredList;
+        
     }
 }
