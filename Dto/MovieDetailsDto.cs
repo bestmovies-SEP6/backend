@@ -35,4 +35,6 @@ public class MovieDetailsDto {
     [JsonPropertyName("tagline")] public string? TagLine { get; set; }
 
     [JsonPropertyName("vote_count")] public int VoteCount { get; set; }
+
+    [JsonPropertyName(("runtime"))] public int Runtime { get; set; }
 }
