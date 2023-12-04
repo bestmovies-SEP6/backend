@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Services;
 using Services.authentication;
 using Services.movie;
+using Services.person;
 using Services.reviews;
 using Services.wishlist;
 
@@ -27,7 +27,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMoviesService, MoviesService>();
 builder.Services.AddScoped<IWIshListsService, WishListsService>();
 builder.Services.AddScoped<IReviewsService, ReviewsService>();
-builder.Services.AddScoped<IPeopleService, PeopleService>();
+builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddMemoryCache();
 
 
@@ -39,7 +39,8 @@ builder.Services.AddScoped<IReviewsDao, ReviewsDao>();
 
 // HttpClients
 builder.Services.AddScoped<IMoviesClient, MoviesHttpClient>();
-builder.Services.AddScoped<IPeopleClient, PeopleHttpClient>();
+builder.Services.AddScoped<IPersonClient, PersonHttpClient>();
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
