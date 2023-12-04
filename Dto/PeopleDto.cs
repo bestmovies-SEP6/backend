@@ -15,4 +15,8 @@ public class PeopleDto
 
     [JsonPropertyName("profile_path")]
     public string ProfilePath { get; set; }
+    
+    [JsonPropertyName("known_for")]
+    public List<KnownForDto>? KnownForMovies { get; set; }
+    
 }
