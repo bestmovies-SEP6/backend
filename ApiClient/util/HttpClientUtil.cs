@@ -1,13 +1,12 @@
 using System.Text.Json;
-using System.Text.Json.Nodes;
 
 namespace ApiClient.util;
 
-public class HttpClientUtil {
+internal static class HttpClientUtil {
     private const string ApiKey = "77d2ee32ec04454772ae601035a1532e";
 
 
-    public static async Task<T> Get<T>(string url) {
+    internal static async Task<T> Get<T>(string url) {
         using var httpClient = new HttpClient();
         string requesrUri = $"{url}?api_key={ApiKey}";
 
