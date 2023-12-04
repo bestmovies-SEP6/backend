@@ -27,7 +27,6 @@ public class PersonDto {
     public int Order { get; set; }
 
     [JsonPropertyName("known_for_department")]
-    public string Department { get; set; }
-
+    public string? Department { get; set; }
 
 }
