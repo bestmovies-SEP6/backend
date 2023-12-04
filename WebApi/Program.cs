@@ -28,6 +28,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMoviesService, MoviesService>();
 builder.Services.AddScoped<IWIshListsService, WishListsService>();
 builder.Services.AddScoped<IReviewsService, ReviewsService>();
+
 builder.Services.AddScoped<IPeopleService, PeopleService>();
 builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddMemoryCache();
