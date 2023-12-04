@@ -39,4 +39,6 @@ public class MovieDetailsDto {
     [JsonPropertyName(("runtime"))] public int Runtime { get; set; }
 
     [JsonPropertyName("overview")] public string? Overview { get; set; }
+
+    [JsonPropertyName("backdrop_path")] public string? BackdropPath { get; set; }
 }
