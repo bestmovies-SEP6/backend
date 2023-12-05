@@ -44,4 +44,16 @@ public class WishListsDao : IWishListsDao {
 
         return movieIds;
     }
+
+    public async Task RemoveMovieFromWishList(string loggedInUser, int movieId) {
+        WishListEntity? wishListEntity = await _databaseContext.WishLists.FirstOrDefaultAsync(entity =>
+            entity.Username.Equals(loggedInUser) && entity.MovieId == movieId);
+
+        if (wishListEntity is null) {
+            throw new Exception(ErrorMessages.MovieNotInWishlist);
+        }
+
+        _databaseContext.WishLists.Remove(wishListEntity);
+        await _databaseContext.SaveChangesAsync();
+    }
 }
