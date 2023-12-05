@@ -21,6 +21,7 @@ internal static class HttpClientUtil {
     public static async Task<T> GetWithQuery<T>(string url) {
         using var httpClient = new HttpClient();
         string requestUri = $"{url}&api_key={ApiKey}";
+        Console.WriteLine(requestUri);
         var httpResponseMessage = await httpClient.GetAsync(requestUri);
         var responseContent = await httpResponseMessage.Content.ReadAsStringAsync();
 

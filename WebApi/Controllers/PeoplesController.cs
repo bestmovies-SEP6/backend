@@ -25,4 +25,15 @@ public class PeoplesController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
+    [HttpGet, Route("person-details/{personId}")]
+    public async Task<ActionResult<PersonDetailsDto>> GetPersonDetails([FromRoute] int personId) {
+        try {
+            PersonDetailsDto personDetails = await _peopleService.GetPersonDetailsById(personId);
+            return Ok(personDetails);
+        }
+        catch (Exception e) {
+            return StatusCode(500, e.Message);
+        }
+    }
 }
