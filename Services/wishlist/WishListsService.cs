@@ -32,4 +32,8 @@ public class WishListsService : IWIshListsService {
         MovieDetailsDto[] movieDetailsArray = await Task.WhenAll(movieTasks);
         return movieDetailsArray.ToList();
     }
+
+    public async Task RemoveMovieFromWishList(string loggedInUser, int movieId) {
+        await _wishListsDao.RemoveMovieFromWishList(loggedInUser, movieId);
+    }
 }

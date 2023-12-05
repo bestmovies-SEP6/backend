@@ -28,6 +28,19 @@ public class WishListsController : ControllerBase {
         }
     }
 
+    [HttpDelete, Route("{movieId}")]
+    public async Task<ActionResult> RemoveMovieFromWishList([FromRoute] int movieId) {
+        try {
+            string loggedInUser = GetLoggedInUser();
+
+            await _wishListsService.RemoveMovieFromWishList(loggedInUser, movieId);
+            return Ok();
+        }
+        catch (Exception e) {
+            return BadRequest(e.Message);
+        }
+    }
+
     [HttpGet]
     public async Task<ActionResult<List<MovieDetailsDto>>> GetAllWishListedMovies() {
         try {

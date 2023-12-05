@@ -20,4 +20,5 @@ public static class ErrorMessages {
 
     // Review errors
     public const string ReviewAlreadyExists  = "You have already reviewed this movie, if you want to change your review please edit or delete the previous review";
+    public const string MovieNotInWishlist = "You do not have provided movie inside your wishlist";
 }
