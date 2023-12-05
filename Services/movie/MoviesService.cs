@@ -103,6 +103,10 @@ public class MoviesService : IMoviesService {
         return GetValueFromCache<Tuple<List<MovieDto>, DateOnly>>(TopRatedCacheKey)!.Item1;
     }
 
+    public async Task<List<MovieDto>> GetSimilarMovies(int movieId) {
+        return await _moviesClient.GetSimilarMovies(movieId);
+
+    }
 
 
     // Get value from the cache

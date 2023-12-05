@@ -6,16 +6,16 @@ namespace WebApi.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class PersonController :  ControllerBase{
+public class PersonsController :  ControllerBase{
     private readonly IPersonService _personService;
 
 
-    public PersonController(IPersonService personService)
+    public PersonsController(IPersonService personService)
     {
         _personService = personService;
     }
 
-    [HttpGet, Route("{movieId}")]
+    [HttpGet, Route("movie/{movieId}")]
     public async Task<ActionResult<List<PersonDto>>> GetPersonsByMovieId([FromRoute] int movieId)
     {
         try {

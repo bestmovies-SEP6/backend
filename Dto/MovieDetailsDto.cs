@@ -28,7 +28,7 @@ public class MovieDetailsDto {
     [JsonPropertyName("production_companies")]
     public ICollection<ProductionCompanyDto>? ProductionCompanies { get; set; }
 
-    [JsonPropertyName("revenue")] public decimal? Revenue { get; set; }
+    [JsonPropertyName("revenue")] public int? Revenue { get; set; }
 
     [JsonPropertyName("status")] public string? Status { get; set; }
 
