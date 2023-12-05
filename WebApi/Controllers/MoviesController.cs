@@ -70,6 +70,17 @@ public class MoviesController : ControllerBase {
         }
     }
 
+    [HttpGet, Route("{movieId}/similar")]
+    public async Task<ActionResult<List<MovieDto>>> GetSimilarMovies([FromRoute] int movieId) {
+        try {
+            List<MovieDto> similarMovies = await _moviesService.GetSimilarMovies(movieId);
+            return Ok(similarMovies);
+        }
+        catch (Exception e) {
+            return StatusCode(500, e.Message);
+        }
+    }
+
   
 
 }
