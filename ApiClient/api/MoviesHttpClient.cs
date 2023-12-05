@@ -1,12 +1,20 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using ApiClient.apiMap;
+using System.Text.Json.Serialization;
 using ApiClient.util;
 using Dto;
 
 namespace ApiClient.api;
 
 public class MoviesHttpClient : IMoviesClient {
+
+    private class MovieIdResponseRoot {
+        [JsonPropertyName("results")]
+        public List<MovieDto>? Results { get; set; }
+    }
+
+
+
     private const string URL = "https://api.themoviedb.org/3";
 
     public async Task<MovieDetailsDto> GetMovieDetailsById(int id) {
@@ -39,6 +47,11 @@ public class MoviesHttpClient : IMoviesClient {
         return ConvertMovies(rootObject);
     }
 
+    public async Task<List<MovieDto>> GetSimilarMovies(int movieId) {
+        MovieIdResponseRoot rootObject = await HttpClientUtil.Get<MovieIdResponseRoot>($"{URL}/movie/{movieId}/similar");
+        return ConvertMovies(rootObject);
+    }
+
     private List<MovieDto> ConvertMovies(MovieIdResponseRoot rootObject) {
         if (rootObject.Results is null) {
             throw new Exception("Something went wrong while fetching now playing movies from tmdb api");
@@ -58,8 +71,9 @@ public class MoviesHttpClient : IMoviesClient {
     private MovieDetailsDto ConvertMovieDetails(MovieDetailsDto movieDetails) {
         movieDetails.PosterPath = $"https://image.tmdb.org/t/p/original{movieDetails.PosterPath}";
         movieDetails.VoteAverage = movieDetails.VoteAverage / 2;
+        movieDetails.BackdropPath = $"https://image.tmdb.org/t/p/original{movieDetails.BackdropPath}";
 
-        foreach (var company in movieDetails.ProductionCompanies) {
+        foreach (var company in movieDetails.ProductionCompanies!) {
             company.LogoPath = $"https://image.tmdb.org/t/p/original{company.LogoPath}";
         }
 
