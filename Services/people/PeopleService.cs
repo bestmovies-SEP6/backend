@@ -16,4 +16,9 @@ public class PeopleService : IPeopleService
     {
         return _peopleClient.GetListOfPopularPeople(pageId);
     }
+
+    public Task<PersonDetailsDto> GetPersonDetailsById(int personId)
+    {
+        return _peopleClient.GetPersonDetailsById(personId);
+    }
 }
