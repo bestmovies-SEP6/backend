@@ -16,7 +16,7 @@ public class PeoplesController : ControllerBase
     }
 
     [HttpGet, Route("popular-person/{pageId}")]
-    public async Task<ActionResult<List<PeopleDto>>> GetNowPlaying([FromRoute] int pageId) {
+    public async Task<ActionResult<List<PeopleDto>>> GetPopularPeopleList([FromRoute] int pageId) {
         try {
             List<PeopleDto> popularPeoples = await _peopleService.GetListOfPopularPeople(pageId);
             return Ok(popularPeoples);

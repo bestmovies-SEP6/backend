@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using ApiClient.apiMap;
+using System.Text.Json.Serialization;
 using ApiClient.util;
 using Dto;
 
@@ -7,6 +7,12 @@ namespace ApiClient.api;
 
 public class PeopleHttpClient : IPeopleClient
 {
+    private class PeopleResponseRoot
+    {
+        [JsonPropertyName("results")]
+        public List<PeopleDto>? Results { get; set; }
+    }
+
     private const string URL = "https://api.themoviedb.org/3";
 
     //Get a list of people ordered by popularity.
@@ -33,8 +39,8 @@ public class PeopleHttpClient : IPeopleClient
             {
                 foreach (var knownFor in result.KnownForMovies) 
                 {
-                    string title = knownFor.Title ?? knownFor.Name;
-                    if (!string.IsNullOrWhiteSpace(title))
+                    knownFor.Title = knownFor.Title ?? knownFor.Name;
+                    if (!string.IsNullOrWhiteSpace(knownFor.Title))
                     {
                         movieTitles.Add(knownFor);
                     }
