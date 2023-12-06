@@ -27,9 +27,6 @@ namespace Data.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.Property<double>("AverageRating")
-                        .HasColumnType("float");
-
                     b.HasKey("Id");
 
                     b.ToTable("Movies");
@@ -37,14 +34,21 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Entity.ReviewEntity", b =>
                 {
-                    b.Property<int>("MovieId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<string>("Author")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("AuthoredAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
 
                     b.Property<double>("Rating")
                         .HasColumnType("float");
@@ -52,9 +56,11 @@ namespace Data.Migrations
                     b.Property<string>("ReviewDescription")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("MovieId", "Author");
+                    b.HasKey("Id");
 
                     b.HasIndex("Author");
+
+                    b.HasIndex("MovieId");
 
                     b.ToTable("Reviews");
                 });

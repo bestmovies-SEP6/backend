@@ -5,4 +5,6 @@ public class MovieFilterDto {
     public int? PageNo { get; set; }
     public string? Region { get; set; }
     public int? Year { get; set; }
+
+    public List<string>? Genres { get; set; }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20231130203030_reMadeDatabase")]
-    partial class reMadeDatabase
+    [Migration("20231206232431_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,6 +33,39 @@ namespace Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Movies");
+                });
+
+            modelBuilder.Entity("Entity.ReviewEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Author")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("AuthoredAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Rating")
+                        .HasColumnType("float");
+
+                    b.Property<string>("ReviewDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Author");
+
+                    b.HasIndex("MovieId");
+
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Entity.UserEntity", b =>
@@ -71,6 +104,25 @@ namespace Data.Migrations
                     b.ToTable("WishLists");
                 });
 
+            modelBuilder.Entity("Entity.ReviewEntity", b =>
+                {
+                    b.HasOne("Entity.UserEntity", "User")
+                        .WithMany("Reviews")
+                        .HasForeignKey("Author")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entity.MovieEntity", "Movie")
+                        .WithMany("Reviews")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Entity.WishListEntity", b =>
                 {
                     b.HasOne("Entity.MovieEntity", "Movie")
@@ -92,11 +144,15 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Entity.MovieEntity", b =>
                 {
+                    b.Navigation("Reviews");
+
                     b.Navigation("WishLists");
                 });
 
             modelBuilder.Entity("Entity.UserEntity", b =>
                 {
+                    b.Navigation("Reviews");
+
                     b.Navigation("WishLists");
                 });
 #pragma warning restore 612, 618
