@@ -11,7 +11,7 @@ public class MovieOrSeriesDto
     public string? Title{ get; set; }
     
     [JsonPropertyName("poster_path")]
-    public string PosterPath { get; set; }
+    public string? PosterPath { get; set; }
     
     [JsonPropertyName("original_title")]
     public string? OriginalName { get; set; }

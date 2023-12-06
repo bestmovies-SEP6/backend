@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Dto;
 using Microsoft.AspNetCore.Mvc;
 using Services.movie;
@@ -22,7 +23,6 @@ public class MoviesController : ControllerBase {
         catch (Exception e) {
             return StatusCode(500, e.Message);
         }
-
     }
 
     [HttpGet, Route("now-playing")]
@@ -81,6 +81,27 @@ public class MoviesController : ControllerBase {
         }
     }
 
-  
+    [HttpGet]
+    // TODO: Think about what can be filtered with and update the method signature
 
+    // https://developer.themoviedb.org/reference/search-movie
+    public async Task<ActionResult<SearchMoviesResponse>> GetMovies([FromQuery, Required] string query,
+        [FromQuery, Required] int pageNo,
+        [FromQuery] string? region,
+        [FromQuery] int? year) {
+
+        MovieFilterDto filterDto = new MovieFilterDto {
+            Query = query,
+            PageNo = pageNo,
+            Region = region,
+            Year = year
+        };
+        try {
+            SearchMoviesResponse movies = await _moviesService.GetMovies(filterDto);
+            return Ok(movies);
+        }
+        catch (Exception e) {
+            return StatusCode(500, e.Message);
+        }
+    }
 }

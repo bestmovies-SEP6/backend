@@ -108,6 +108,10 @@ public class MoviesService : IMoviesService {
 
     }
 
+    public Task<SearchMoviesResponse> GetMovies(MovieFilterDto filterDto) {
+        return _moviesClient.GetMovies(filterDto);
+    }
+
 
     // Get value from the cache
     private T? GetValueFromCache<T>(string cacheKey) {

@@ -9,4 +9,5 @@ public interface IMoviesClient {
     Task<List<MovieDto>> GetPopular();
     Task<List<MovieDto>> GetTopRated();
     Task<List<MovieDto>> GetSimilarMovies(int movieId);
+    Task<SearchMoviesResponse> GetMovies(MovieFilterDto filterDto);
 }

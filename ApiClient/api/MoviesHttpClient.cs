@@ -7,12 +7,9 @@ using Dto;
 namespace ApiClient.api;
 
 public class MoviesHttpClient : IMoviesClient {
-
     private class MovieIdResponseRoot {
-        [JsonPropertyName("results")]
-        public List<MovieDto>? Results { get; set; }
+        [JsonPropertyName("results")] public List<MovieDto>? Results { get; set; }
     }
-
 
 
     private const string URL = "https://api.themoviedb.org/3";
@@ -48,8 +45,27 @@ public class MoviesHttpClient : IMoviesClient {
     }
 
     public async Task<List<MovieDto>> GetSimilarMovies(int movieId) {
-        MovieIdResponseRoot rootObject = await HttpClientUtil.Get<MovieIdResponseRoot>($"{URL}/movie/{movieId}/similar");
+        MovieIdResponseRoot rootObject =
+            await HttpClientUtil.Get<MovieIdResponseRoot>($"{URL}/movie/{movieId}/similar");
         return ConvertMovies(rootObject);
+    }
+
+    public async Task<SearchMoviesResponse> GetMovies(MovieFilterDto filterDto) {
+        string urlWithQuery = $"{URL}/search/movie?query={filterDto.Query}&page={filterDto.PageNo}";
+
+        if (!string.IsNullOrEmpty(filterDto.Region)) {
+            urlWithQuery = $"{urlWithQuery}&region={filterDto.Region}";
+        }
+
+        if (filterDto.Year is not null && filterDto.Year != 0) {
+            urlWithQuery = $"{urlWithQuery}&year={filterDto.Year}";
+        }
+
+        SearchMoviesResponse rootObject = await HttpClientUtil.GetWithQuery<SearchMoviesResponse>(urlWithQuery);
+        rootObject.Results = ConvertMovies(new MovieIdResponseRoot() {
+            Results = rootObject.Results
+        });
+        return rootObject;
     }
 
     private List<MovieDto> ConvertMovies(MovieIdResponseRoot rootObject) {
