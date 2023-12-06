@@ -88,13 +88,15 @@ public class MoviesController : ControllerBase {
     public async Task<ActionResult<SearchMoviesResponse>> GetMovies([FromQuery, Required] string query,
         [FromQuery, Required] int pageNo,
         [FromQuery] string? region,
-        [FromQuery] int? year) {
+        [FromQuery] int? year,
+        [FromQuery(Name = "genres")] List<string>? genres) {
 
         MovieFilterDto filterDto = new MovieFilterDto {
             Query = query,
             PageNo = pageNo,
             Region = region,
-            Year = year
+            Year = year,
+            Genres = genres
         };
         try {
             SearchMoviesResponse movies = await _moviesService.GetMovies(filterDto);

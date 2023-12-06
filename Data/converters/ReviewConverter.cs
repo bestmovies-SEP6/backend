@@ -8,6 +8,7 @@ public static class ReviewConverter {
 
     public static ReviewEntity ToEntity( ReviewDto reviewDto) {
         return new ReviewEntity() {
+            Id = reviewDto.Id,
             Author = reviewDto.Author,
             AuthoredAt = DateTime.Now,
             MovieId = reviewDto.MovieId,
@@ -21,6 +22,7 @@ public static class ReviewConverter {
     }
     public static ReviewDto ToDto(ReviewEntity reviewEntity) {
         return new ReviewDto() {
+            Id = reviewEntity.Id,
             Author = reviewEntity.Author,
             AuthoredAt = reviewEntity.AuthoredAt.ToString("yyyy-MM-dd HH:mm:ss"),
             MovieId = reviewEntity.MovieId,

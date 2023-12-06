@@ -5,6 +5,8 @@ namespace Entity;
 
 public class ReviewEntity {
 
+    [Key] public int Id { get; set; }
+
     [ForeignKey(nameof(UserEntity))]
     public string Author { get; set; }
 

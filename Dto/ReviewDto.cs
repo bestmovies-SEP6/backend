@@ -1,8 +1,11 @@
+using System.Runtime.InteropServices;
 using System.Text.Json.Serialization;
 
 namespace Dto;
 
 public class ReviewDto {
+
+    [JsonPropertyName("id")] public int Id { get; set; }
     [JsonPropertyName("movie_id")] public int MovieId { get; set; }
 
     [JsonPropertyName("description")] public string? ReviewDescription { get; set; }

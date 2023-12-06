@@ -22,9 +22,7 @@ public class DatabaseContext : DbContext {
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         modelBuilder.Entity<WishListEntity>().HasKey(entity => new {entity.MovieId, entity.Username});
-        modelBuilder.Entity<ReviewEntity>().HasKey(entity => new {entity.MovieId, entity.Author});
-
-
+        modelBuilder.Entity<ReviewEntity>().HasKey(entity => new {entity.Id});
 
         // Building WishListEntity
         modelBuilder.Entity<WishListEntity>()
