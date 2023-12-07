@@ -29,10 +29,11 @@ public class ReviewsController : ControllerBase {
     }
 
     [HttpGet, Route("{movieId}")]
-    public async Task<ActionResult<List<ReviewDto>>> GetReviewsByMovieId([FromRoute] int movieId) {
+    public async Task<ActionResult<GetMovieReviewsResponseDto>> GetReviewsByMovieId([FromRoute] int movieId,
+        [FromQuery] int page = 1, [FromQuery] int pageSize = 10) {
         try {
-            List<ReviewDto> reviewDtos = await _reviewsService.GetReviewsByMovieId(movieId);
-            return Ok(reviewDtos);
+            GetMovieReviewsResponseDto responseDto = await _reviewsService.GetReviewsByMovieId(movieId, page, pageSize);
+            return Ok(responseDto);
         }
         catch (Exception e) {
             return StatusCode(500, e.Message);
