@@ -11,7 +11,6 @@ public class MoviesDao : IMoviesDao {
         _databaseContext = databaseContext;
     }
 
-
     public async Task AddIfNotExists(int movieId) {
       MovieEntity? movieEntity =  await _databaseContext.Movies.FindAsync(movieId);
       if (movieEntity is not null) return;
