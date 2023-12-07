@@ -18,8 +18,9 @@ public class ReviewsService : IReviewsService {
         await _reviewsDao.AddReview(reviewDto);
     }
 
-    public Task<GetMovieReviewsResponseDto> GetReviewsByMovieId(int movieId, int page, int pageSize) {
-        return  _reviewsDao.GetReviewsByMovieId(movieId, page, pageSize);
+    public async Task<GetMovieReviewsResponseDto> GetReviewsByMovieId(int movieId, int page, int pageSize) {
+        await _moviesDao.AddIfNotExists(movieId);
+        return  await _reviewsDao.GetReviewsByMovieId(movieId, page, pageSize);
     }
 
 
