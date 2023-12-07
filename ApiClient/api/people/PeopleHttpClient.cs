@@ -107,7 +107,8 @@ public class PeopleHttpClient : IPeopleClient
                     Popularity = m.Popularity,
                     MediaType = m.MediaType 
                 })
-                .OrderByDescending(m => m.Popularity) // Then by popularity
+                .OrderByDescending(m => m.Popularity)
+                .Take(10)
                 .ToList();
         }
         if (personDetails.CombinedCredits?.Crew != null)
@@ -122,6 +123,7 @@ public class PeopleHttpClient : IPeopleClient
 
                 })
                 .OrderByDescending(m => m.Popularity)
+                .Take(10)
                 .ToList();
         }
 
