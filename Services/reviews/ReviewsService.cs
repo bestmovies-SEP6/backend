@@ -27,4 +27,8 @@ public class ReviewsService : IReviewsService {
         await _moviesDao.AddIfNotExists(movieId);
         return await _reviewsDao.GetAverageRatingByMovieId(movieId);
     }
+
+    public Task DeleteReview(int reviewId, string loggedInUser) {
+        return _reviewsDao.DeleteReview(reviewId, loggedInUser);
+    }
 }

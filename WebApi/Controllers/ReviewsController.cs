@@ -28,6 +28,19 @@ public class ReviewsController : ControllerBase {
         }
     }
 
+    [HttpDelete, Route("{reviewId}")]
+    [Authorize]
+    public async Task<ActionResult> DeleteReview([FromRoute] int reviewId) {
+        try {
+            string loggedInUser = GetLoggedInUser();
+            await _reviewsService.DeleteReview(reviewId, loggedInUser);
+            return Ok();
+        }
+        catch (Exception e) {
+            return StatusCode(500, e.Message);
+        }
+    }
+
     [HttpGet, Route("{movieId}")]
     public async Task<ActionResult<GetMovieReviewsResponseDto>> GetReviewsByMovieId([FromRoute] int movieId,
         [FromQuery] int page = 1, [FromQuery] int pageSize = 10) {
