@@ -13,8 +13,18 @@ public class MovieOrSeriesDto
     [JsonPropertyName("poster_path")]
     public string? PosterPath { get; set; }
     
-    [JsonPropertyName("original_title")]
+    [JsonPropertyName("original_name")]
     public string? OriginalName { get; set; }
     
+    [JsonPropertyName("popularity")]
+    public double? Popularity { get; set; }
     
+    [JsonPropertyName("name")]
+    public string? Name { get; set; }
+    
+    [JsonPropertyName("media_type")]
+    public string MediaType { get; set; }
+    
+    [JsonPropertyName("order")]
+    public int? Order { get; set; }
 }

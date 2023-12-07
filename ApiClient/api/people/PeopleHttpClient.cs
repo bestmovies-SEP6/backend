@@ -23,7 +23,57 @@ public class PeopleHttpClient : IPeopleClient
     public async Task<PersonDetailsDto> GetPersonDetailsById(int personId)
     {
         PersonDetailsDto personDetails = await HttpClientUtil.GetWithQuery<PersonDetailsDto>($"{URL}/person/{personId}?language=en-US&append_to_response=combined_credits");
-        return ConvertPersonDetails(personDetails);    }
+        return ConvertPersonDetails(personDetails);    
+    }
+
+    public async Task<PersonMoviePieChartDto> GetPersonMoviePieChart(int personId)
+    {
+        CombinedCreditsDto combinedCreditsDto = await HttpClientUtil.GetWithQuery<CombinedCreditsDto>($"{URL}/person/{personId}/combined_credits?language=en-US");
+        return ConvertPersonMoviePieChart(combinedCreditsDto);
+        
+    }
+
+    private PersonMoviePieChartDto ConvertPersonMoviePieChart(CombinedCreditsDto combinedCreditsDto)
+    {
+        PersonMoviePieChartDto personMoviePieChartDto = new PersonMoviePieChartDto();
+        int leadingRoleCount = 0;
+        int supportingRoleCount = 0;
+        int guestRoleCount = 0;
+        int crewCount = 0;
+        int notSpecifiedCount = 0;
+
+        foreach (var m in combinedCreditsDto.Cast)
+        {
+            if (m.MediaType == "movie")
+            {
+                if (m.Order == null)
+                {
+                    notSpecifiedCount++;
+                }
+                else if (m.Order <= 3)
+                {
+                    leadingRoleCount++;
+                }
+                else if (m.Order >= 4  && m.Order < 8)
+                {
+                    supportingRoleCount++;
+                }
+                else if (m.Order >= 8)
+                {
+                    guestRoleCount++;
+                }
+            }
+        }
+        
+        crewCount = combinedCreditsDto.Crew.Count;        
+        personMoviePieChartDto.LeadRoles = leadingRoleCount;
+        personMoviePieChartDto.SupportingRoles = supportingRoleCount;
+        personMoviePieChartDto.GuestRoles = guestRoleCount;
+        personMoviePieChartDto.CrewRoles = crewCount;
+        personMoviePieChartDto.NotSpecified = notSpecifiedCount;
+        
+        return personMoviePieChartDto;
+    }
 
     private PersonDetailsDto ConvertPersonDetails(PersonDetailsDto personDetails)
     {
@@ -52,10 +102,12 @@ public class PeopleHttpClient : IPeopleClient
                 .Select(m => new MovieOrSeriesDto
                 {
                     Id = m.Id,
-                    Title = !string.IsNullOrEmpty(m.Title) ? m.Title : m.OriginalName ?? "Title not available",
-                    PosterPath = m.PosterPath != null ? $"https://image.tmdb.org/t/p/original{m.PosterPath}" : "Default poster path" 
+                    Title = !string.IsNullOrEmpty(m.Title) ? m.Title : m.Name ?? m.OriginalName ?? "Title not available",
+                    PosterPath = m.PosterPath != null ? $"https://image.tmdb.org/t/p/original{m.PosterPath}" : "Default poster path",
+                    Popularity = m.Popularity,
+                    MediaType = m.MediaType 
                 })
-                .Take(10)
+                .OrderByDescending(m => m.Popularity) // Then by popularity
                 .ToList();
         }
         if (personDetails.CombinedCredits?.Crew != null)
@@ -65,9 +117,11 @@ public class PeopleHttpClient : IPeopleClient
                 {
                     Id = m.Id,
                     Title = !string.IsNullOrEmpty(m.Title) ? m.Title : m.OriginalName ?? "Title not available",
-                    PosterPath = m.PosterPath != null ? $"https://image.tmdb.org/t/p/original{m.PosterPath}" : "Default poster path"
+                    PosterPath = m.PosterPath != null ? $"https://image.tmdb.org/t/p/original{m.PosterPath}" : "Default poster path",
+                    Popularity = m.Popularity ?? 0
+
                 })
-                .Take(10)
+                .OrderByDescending(m => m.Popularity)
                 .ToList();
         }
 

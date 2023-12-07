@@ -36,4 +36,15 @@ public class PeoplesController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
+    [HttpGet, Route("person-movie-pie-chart/{personId}")]
+    public async Task<ActionResult<PersonMoviePieChartDto>> GetPersonMoviePieChart([FromRoute] int personId) {
+        try {
+            PersonMoviePieChartDto personMoviePieChart = await _peopleService.GetPersonMoviePieChart(personId);
+            return Ok(personMoviePieChart);
+        }
+        catch (Exception e) {
+            return StatusCode(500, e.Message);
+        }
+    }
 }

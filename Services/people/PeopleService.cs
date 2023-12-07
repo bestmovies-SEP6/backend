@@ -21,4 +21,9 @@ public class PeopleService : IPeopleService
     {
         return _peopleClient.GetPersonDetailsById(personId);
     }
+
+    public Task<PersonMoviePieChartDto> GetPersonMoviePieChart(int personId)
+    {
+        return _peopleClient.GetPersonMoviePieChart(personId);
+    }
 }
