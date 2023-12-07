@@ -31,6 +31,16 @@ public static class ReviewConverter {
         };
     }
 
+    public static GetMovieReviewsResponseDto ToResponseDto(List<ReviewEntity> reviewEntities, int totalPages, double averageRating, int totalReviews) {
+        return new GetMovieReviewsResponseDto() {
+            Reviews = ToDtoList(reviewEntities),
+            TotalPages = totalPages,
+            AverageRating = averageRating   ,
+            TotalReviews = totalReviews,
+            MovieId = reviewEntities[0].MovieId
+        };
+    }
+
    
     
 }
