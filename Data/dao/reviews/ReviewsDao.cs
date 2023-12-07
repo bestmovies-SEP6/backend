@@ -29,6 +29,33 @@ public class ReviewsDao : IReviewsDao {
         }
     }
 
+    public async Task<GetMovieReviewsResponseDto> GetReviewsByMovieId(int movieId, int page, int pageSize) {
+        if (page <1 || pageSize < 1) {
+            throw new Exception(ErrorMessages.InvalidPageOrPageSize);
+        }
+        int skipAmount = (page - 1) * pageSize;
+
+        List<ReviewEntity> reviewEntities = await _databaseContext.Reviews
+            .Where(entity => entity.MovieId == movieId)
+            .OrderByDescending(review => review.AuthoredAt)
+            .Skip(skipAmount)
+            .Take(pageSize)
+            .ToListAsync();
+
+        int totalReviews = await _databaseContext.Reviews
+            .Where(entity => entity.MovieId == movieId)
+            .CountAsync();
+
+        int totalPages = (int)Math.Ceiling((double)totalReviews / pageSize);
+
+        double averageRating = await _databaseContext.Reviews
+            .Where(reviewEntity => reviewEntity.MovieId == movieId)
+            .Select(entity => entity.Rating)
+            .AverageAsync();
+
+        return ReviewConverter.ToResponseDto(reviewEntities, totalPages, averageRating, totalReviews);
+    }
+
     public async Task<List<ReviewDto>> GetReviewsByMovieId(int movieId) {
         List<ReviewEntity> reviewEntities = await _databaseContext.Reviews
             .Where(reviewEntity => reviewEntity.MovieId == movieId)

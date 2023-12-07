@@ -4,6 +4,6 @@ namespace Services.reviews;
 
 public interface IReviewsService {
     Task AddReview( ReviewDto reviewDto);
-    Task<List<ReviewDto>> GetReviewsByMovieId(int movieId);
+    Task<GetMovieReviewsResponseDto> GetReviewsByMovieId(int movieId, int page, int pageSize);
     Task<double> GetAverageRatingByMovieId(int movieId);
-}
+}                                                         
