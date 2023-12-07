@@ -2,7 +2,7 @@
 
 namespace Dto;
 
-public class PersonMoviePieChartDto
+public class PersonMovieRolesDto
 {
     [JsonPropertyName("lead_role")]
     public int? LeadRoles { get; set; }

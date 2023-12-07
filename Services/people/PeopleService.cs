@@ -22,8 +22,18 @@ public class PeopleService : IPeopleService
         return _peopleClient.GetPersonDetailsById(personId);
     }
 
-    public Task<PersonMoviePieChartDto> GetPersonMoviePieChart(int personId)
+    public Task<PersonMovieRolesDto> GetPersonMoviePieChart(int personId)
     {
         return _peopleClient.GetPersonMoviePieChart(personId);
+    }
+
+    public Task<List<PersonMoviePopularityDto>> GetPersonMoviePopularityLineChart(int personId)
+    {
+        return _peopleClient.GetPersonMoviePopularityLineChart(personId);
+    }
+
+    public Task<PersonMovieGenreVariationDto> GetPersonMovieGenreVariation(int personId)
+    {
+        return _peopleClient.GetPersonMovieGenreVariation(personId);
     }
 }

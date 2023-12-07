@@ -27,4 +27,13 @@ public class MovieOrSeriesDto
     
     [JsonPropertyName("order")]
     public int? Order { get; set; }
+    
+    [JsonPropertyName("release_date")]
+    public string? ReleaseDate { get; set; }
+    
+    [JsonPropertyName("first_air_date")]
+    public string? FirstAirDate { get; set; }
+    
+    [JsonPropertyName("genre_ids")]
+    public List<int> GenreIds { get; set; }
 }

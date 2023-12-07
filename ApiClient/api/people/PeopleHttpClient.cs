@@ -26,16 +26,90 @@ public class PeopleHttpClient : IPeopleClient
         return ConvertPersonDetails(personDetails);    
     }
 
-    public async Task<PersonMoviePieChartDto> GetPersonMoviePieChart(int personId)
+    public async Task<PersonMovieRolesDto> GetPersonMoviePieChart(int personId)
     {
         CombinedCreditsDto combinedCreditsDto = await HttpClientUtil.GetWithQuery<CombinedCreditsDto>($"{URL}/person/{personId}/combined_credits?language=en-US");
         return ConvertPersonMoviePieChart(combinedCreditsDto);
         
     }
 
-    private PersonMoviePieChartDto ConvertPersonMoviePieChart(CombinedCreditsDto combinedCreditsDto)
+    public async Task<List<PersonMoviePopularityDto>> GetPersonMoviePopularityLineChart(int personId)
     {
-        PersonMoviePieChartDto personMoviePieChartDto = new PersonMoviePieChartDto();
+        CombinedCreditsDto combinedCreditsDto = await HttpClientUtil.GetWithQuery<CombinedCreditsDto>($"{URL}/person/{personId}/combined_credits?language=en-US");
+        return ConvertPersonMoviePopularityLineChart(combinedCreditsDto);
+    }
+
+    public async Task<PersonMovieGenreVariationDto> GetPersonMovieGenreVariation(int personId)
+    {
+        CombinedCreditsDto combinedCreditsDto = await HttpClientUtil.GetWithQuery<CombinedCreditsDto>($"{URL}/person/{personId}/combined_credits?language=en-US");
+        return ConvertPersonMovieGenreVariation(combinedCreditsDto);
+    }
+
+    private PersonMovieGenreVariationDto ConvertPersonMovieGenreVariation(CombinedCreditsDto combinedCreditsDto)
+    {
+        PersonMovieGenreVariationDto personMovieGenreVariationDto = new PersonMovieGenreVariationDto();
+
+        foreach (var movieOrSeriesDto in combinedCreditsDto.Cast)
+        {
+            foreach (int genreId in movieOrSeriesDto.GenreIds)
+            {
+                if (GenreMapping.CombinedGenres.TryGetValue(genreId, out string propertyName))
+                {
+                    IncrementGenreCount(ref personMovieGenreVariationDto, propertyName);
+                }
+            }
+        }
+
+        return personMovieGenreVariationDto;
+    }
+
+    private void IncrementGenreCount(ref PersonMovieGenreVariationDto dto, string genrePropertyName)
+    {
+        var property = dto.GetType().GetProperty(genrePropertyName);
+        if (property != null && property.PropertyType == typeof(int?))
+        {
+            int? currentValue = (int?)property.GetValue(dto);
+            property.SetValue(dto, (currentValue ?? 0) + 1);
+        }
+    }
+
+    private List<PersonMoviePopularityDto> ConvertPersonMoviePopularityLineChart(CombinedCreditsDto combinedCreditsDto)
+    {
+        List<PersonMoviePopularityDto> moviePopularityLineGraphDto = new List<PersonMoviePopularityDto>();
+
+        foreach (var m in combinedCreditsDto.Cast)
+        {
+            // Check if both Popularity and ReleaseDate are not null
+            if (m.Popularity.HasValue && (!string.IsNullOrEmpty(m.ReleaseDate) || !string.IsNullOrEmpty(m.FirstAirDate)))
+            {
+                moviePopularityLineGraphDto.Add(new PersonMoviePopularityDto
+                {
+                    Title = !string.IsNullOrEmpty(m.Title) ? m.Title : m.Name ?? m.OriginalName ?? "Title not available",
+                    PopularityScores = m.Popularity.Value,
+                    ReleaseDate = m.ReleaseDate ?? m.FirstAirDate
+                });
+            }
+        }
+        foreach (var m in combinedCreditsDto.Crew)
+        {
+            // Check if both Popularity and ReleaseDate are not null
+            if (m.Popularity.HasValue && (!string.IsNullOrEmpty(m.ReleaseDate) || !string.IsNullOrEmpty(m.FirstAirDate)))
+            {
+                moviePopularityLineGraphDto.Add(new PersonMoviePopularityDto
+                {
+                    Title = !string.IsNullOrEmpty(m.Title) ? m.Title : m.Name ?? m.OriginalName ?? "Title not available",
+                    PopularityScores = m.Popularity.Value,
+                    ReleaseDate = m.ReleaseDate ?? m.FirstAirDate
+                });
+            }
+        }
+        return moviePopularityLineGraphDto;
+    }
+
+
+    private PersonMovieRolesDto ConvertPersonMoviePieChart(CombinedCreditsDto combinedCreditsDto)
+    {
+        PersonMovieRolesDto personMovieRolesDto = new PersonMovieRolesDto();
         int leadingRoleCount = 0;
         int supportingRoleCount = 0;
         int guestRoleCount = 0;
@@ -66,13 +140,13 @@ public class PeopleHttpClient : IPeopleClient
         }
         
         crewCount = combinedCreditsDto.Crew.Count;        
-        personMoviePieChartDto.LeadRoles = leadingRoleCount;
-        personMoviePieChartDto.SupportingRoles = supportingRoleCount;
-        personMoviePieChartDto.GuestRoles = guestRoleCount;
-        personMoviePieChartDto.CrewRoles = crewCount;
-        personMoviePieChartDto.NotSpecified = notSpecifiedCount;
+        personMovieRolesDto.LeadRoles = leadingRoleCount;
+        personMovieRolesDto.SupportingRoles = supportingRoleCount;
+        personMovieRolesDto.GuestRoles = guestRoleCount;
+        personMovieRolesDto.CrewRoles = crewCount;
+        personMovieRolesDto.NotSpecified = notSpecifiedCount;
         
-        return personMoviePieChartDto;
+        return personMovieRolesDto;
     }
 
     private PersonDetailsDto ConvertPersonDetails(PersonDetailsDto personDetails)
