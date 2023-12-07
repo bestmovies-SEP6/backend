@@ -30,9 +30,10 @@ public class ReviewsDao : IReviewsDao {
     }
 
     public async Task<GetMovieReviewsResponseDto> GetReviewsByMovieId(int movieId, int page, int pageSize) {
-        if (page <1 || pageSize < 1) {
+        if (page < 1 || pageSize < 1) {
             throw new Exception(ErrorMessages.InvalidPageOrPageSize);
         }
+
         int skipAmount = (page - 1) * pageSize;
 
         List<ReviewEntity> reviewEntities = await _databaseContext.Reviews
@@ -46,7 +47,7 @@ public class ReviewsDao : IReviewsDao {
             .Where(entity => entity.MovieId == movieId)
             .CountAsync();
 
-        int totalPages = (int)Math.Ceiling((double)totalReviews / pageSize);
+        int totalPages = (int) Math.Ceiling((double) totalReviews / pageSize);
 
         double averageRating = await _databaseContext.Reviews
             .Where(reviewEntity => reviewEntity.MovieId == movieId)
@@ -68,5 +69,19 @@ public class ReviewsDao : IReviewsDao {
             .Where(reviewEntity => reviewEntity.MovieId == movieId)
             .Select(entity => entity.Rating)
             .AverageAsync();
+    }
+
+    public async Task DeleteReview(int reviewId, string loggedInUser) {
+        ReviewEntity? reviewEntity = await _databaseContext.Reviews.FindAsync(reviewId);
+        if (reviewEntity is null) {
+            throw new Exception(ErrorMessages.ReviewNotFound);
+        }
+
+        if (!reviewEntity.Author.Equals(loggedInUser)) {
+            throw new Exception(ErrorMessages.NotAuthorized);
+        }
+
+        _databaseContext.Reviews.Remove(reviewEntity);
+        await _databaseContext.SaveChangesAsync();
     }
 }
