@@ -36,4 +36,38 @@ public class PeoplesController : ControllerBase
             return StatusCode(500, e.Message);
         }
     }
+    
+    [HttpGet, Route("person-movie-roles/{personId}")]
+    public async Task<ActionResult<PersonMovieRolesDto>> GetPersonMovieRoles([FromRoute] int personId) {
+        try {
+            PersonMovieRolesDto personMovieRoles = await _peopleService.GetPersonMoviePieChart(personId);
+            return Ok(personMovieRoles);
+        }
+        catch (Exception e) {
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    [HttpGet, Route("person-movie-popularity/{personId}")]
+    public async Task<ActionResult<List<PersonMoviePopularityDto>>> GetPersonMoviePopularity([FromRoute] int personId) {
+        try {  
+            List<PersonMoviePopularityDto> personMoviePopularityLineGraphDto = await _peopleService.GetPersonMoviePopularityLineChart(personId);
+            return Ok(personMoviePopularityLineGraphDto);
+        }
+        catch (Exception e) {
+            return StatusCode(500, e.Message);
+        }
+    }
+    
+    [HttpGet, Route("person-movie-genre-variation/{personId}")]
+    public async Task<ActionResult<PersonMovieGenreVariationDto>> GetPersonMovieGenreVariation([FromRoute] int personId) {
+        try {  
+            Console.WriteLine("personId: " + personId);
+            PersonMovieGenreVariationDto personMoviePopularityLineGraphDto = await _peopleService.GetPersonMovieGenreVariation(personId);
+            return Ok(personMoviePopularityLineGraphDto);
+        }
+        catch (Exception e) {
+            return StatusCode(500, e.Message);
+        }
+    }
 }

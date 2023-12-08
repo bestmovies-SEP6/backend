@@ -23,7 +23,131 @@ public class PeopleHttpClient : IPeopleClient
     public async Task<PersonDetailsDto> GetPersonDetailsById(int personId)
     {
         PersonDetailsDto personDetails = await HttpClientUtil.GetWithQuery<PersonDetailsDto>($"{URL}/person/{personId}?language=en-US&append_to_response=combined_credits");
-        return ConvertPersonDetails(personDetails);    }
+        return ConvertPersonDetails(personDetails);    
+    }
+
+    public async Task<PersonMovieRolesDto> GetPersonMoviePieChart(int personId)
+    {
+        CombinedCreditsDto combinedCreditsDto = await HttpClientUtil.GetWithQuery<CombinedCreditsDto>($"{URL}/person/{personId}/combined_credits?language=en-US");
+        return ConvertPersonMoviePieChart(combinedCreditsDto);
+        
+    }
+
+    public async Task<List<PersonMoviePopularityDto>> GetPersonMoviePopularityLineChart(int personId)
+    {
+        CombinedCreditsDto combinedCreditsDto = await HttpClientUtil.GetWithQuery<CombinedCreditsDto>($"{URL}/person/{personId}/combined_credits?language=en-US");
+        return ConvertPersonMoviePopularityLineChart(combinedCreditsDto);
+    }
+
+    public async Task<PersonMovieGenreVariationDto> GetPersonMovieGenreVariation(int personId)
+    {
+        CombinedCreditsDto combinedCreditsDto = await HttpClientUtil.GetWithQuery<CombinedCreditsDto>($"{URL}/person/{personId}/combined_credits?language=en-US");
+        return ConvertPersonMovieGenreVariation(combinedCreditsDto);
+    }
+
+    private PersonMovieGenreVariationDto ConvertPersonMovieGenreVariation(CombinedCreditsDto combinedCreditsDto)
+    {
+        PersonMovieGenreVariationDto personMovieGenreVariationDto = new PersonMovieGenreVariationDto();
+
+        foreach (var movieOrSeriesDto in combinedCreditsDto.Cast)
+        {
+            foreach (int genreId in movieOrSeriesDto.GenreIds)
+            {
+                if (GenreMapping.CombinedGenres.TryGetValue(genreId, out string propertyName))
+                {
+                    IncrementGenreCount(ref personMovieGenreVariationDto, propertyName);
+                }
+            }
+        }
+
+        return personMovieGenreVariationDto;
+    }
+
+    private void IncrementGenreCount(ref PersonMovieGenreVariationDto dto, string genrePropertyName)
+    {
+        var property = dto.GetType().GetProperty(genrePropertyName);
+        if (property != null && property.PropertyType == typeof(int?))
+        {
+            int? currentValue = (int?)property.GetValue(dto);
+            property.SetValue(dto, (currentValue ?? 0) + 1);
+        }
+    }
+
+    private List<PersonMoviePopularityDto> ConvertPersonMoviePopularityLineChart(CombinedCreditsDto combinedCreditsDto)
+    {
+        List<PersonMoviePopularityDto> moviePopularityLineGraphDto = new List<PersonMoviePopularityDto>();
+
+        foreach (var m in combinedCreditsDto.Cast)
+        {
+            // Check if both Popularity and ReleaseDate are not null
+            if (m.Popularity.HasValue && (!string.IsNullOrEmpty(m.ReleaseDate) || !string.IsNullOrEmpty(m.FirstAirDate)))
+            {
+                moviePopularityLineGraphDto.Add(new PersonMoviePopularityDto
+                {
+                    Title = !string.IsNullOrEmpty(m.Title) ? m.Title : m.Name ?? m.OriginalName ?? "Title not available",
+                    PopularityScores = m.Popularity.Value,
+                    ReleaseDate = m.ReleaseDate ?? m.FirstAirDate
+                });
+            }
+        }
+        foreach (var m in combinedCreditsDto.Crew)
+        {
+            // Check if both Popularity and ReleaseDate are not null
+            if (m.Popularity.HasValue && (!string.IsNullOrEmpty(m.ReleaseDate) || !string.IsNullOrEmpty(m.FirstAirDate)))
+            {
+                moviePopularityLineGraphDto.Add(new PersonMoviePopularityDto
+                {
+                    Title = !string.IsNullOrEmpty(m.Title) ? m.Title : m.Name ?? m.OriginalName ?? "Title not available",
+                    PopularityScores = m.Popularity.Value,
+                    ReleaseDate = m.ReleaseDate ?? m.FirstAirDate
+                });
+            }
+        }
+        return moviePopularityLineGraphDto;
+    }
+
+
+    private PersonMovieRolesDto ConvertPersonMoviePieChart(CombinedCreditsDto combinedCreditsDto)
+    {
+        PersonMovieRolesDto personMovieRolesDto = new PersonMovieRolesDto();
+        int leadingRoleCount = 0;
+        int supportingRoleCount = 0;
+        int guestRoleCount = 0;
+        int crewCount = 0;
+        int notSpecifiedCount = 0;
+
+        foreach (var m in combinedCreditsDto.Cast)
+        {
+            if (m.MediaType == "movie")
+            {
+                if (m.Order == null)
+                {
+                    notSpecifiedCount++;
+                }
+                else if (m.Order <= 3)
+                {
+                    leadingRoleCount++;
+                }
+                else if (m.Order >= 4  && m.Order < 8)
+                {
+                    supportingRoleCount++;
+                }
+                else if (m.Order >= 8)
+                {
+                    guestRoleCount++;
+                }
+            }
+        }
+        
+        crewCount = combinedCreditsDto.Crew.Count;        
+        personMovieRolesDto.LeadRoles = leadingRoleCount;
+        personMovieRolesDto.SupportingRoles = supportingRoleCount;
+        personMovieRolesDto.GuestRoles = guestRoleCount;
+        personMovieRolesDto.CrewRoles = crewCount;
+        personMovieRolesDto.NotSpecified = notSpecifiedCount;
+        
+        return personMovieRolesDto;
+    }
 
     private PersonDetailsDto ConvertPersonDetails(PersonDetailsDto personDetails)
     {
@@ -52,9 +176,12 @@ public class PeopleHttpClient : IPeopleClient
                 .Select(m => new MovieOrSeriesDto
                 {
                     Id = m.Id,
-                    Title = !string.IsNullOrEmpty(m.Title) ? m.Title : m.OriginalName ?? "Title not available",
-                    PosterPath = m.PosterPath != null ? $"https://image.tmdb.org/t/p/original{m.PosterPath}" : "Default poster path" 
+                    Title = !string.IsNullOrEmpty(m.Title) ? m.Title : m.Name ?? m.OriginalName ?? "Title not available",
+                    PosterPath = m.PosterPath != null ? $"https://image.tmdb.org/t/p/original{m.PosterPath}" : "Default poster path",
+                    Popularity = m.Popularity,
+                    MediaType = m.MediaType 
                 })
+                .OrderByDescending(m => m.Popularity)
                 .Take(10)
                 .ToList();
         }
@@ -65,8 +192,11 @@ public class PeopleHttpClient : IPeopleClient
                 {
                     Id = m.Id,
                     Title = !string.IsNullOrEmpty(m.Title) ? m.Title : m.OriginalName ?? "Title not available",
-                    PosterPath = m.PosterPath != null ? $"https://image.tmdb.org/t/p/original{m.PosterPath}" : "Default poster path"
+                    PosterPath = m.PosterPath != null ? $"https://image.tmdb.org/t/p/original{m.PosterPath}" : "Default poster path",
+                    Popularity = m.Popularity ?? 0
+
                 })
+                .OrderByDescending(m => m.Popularity)
                 .Take(10)
                 .ToList();
         }
