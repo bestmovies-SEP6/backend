@@ -15,7 +15,7 @@ public class MovieDetailsDto {
 
     [JsonPropertyName("adult")] public bool IsAdult { get; set; }
 
-    [JsonPropertyName("budget")] public int? Budget { get; set; }
+    [JsonPropertyName("budget")] public long? Budget { get; set; }
 
     [JsonPropertyName("genres")] public ICollection<GenreDto>? Genres { get; set; }
 
@@ -28,7 +28,7 @@ public class MovieDetailsDto {
     [JsonPropertyName("production_companies")]
     public ICollection<ProductionCompanyDto>? ProductionCompanies { get; set; }
 
-    [JsonPropertyName("revenue")] public int? Revenue { get; set; }
+    [JsonPropertyName("revenue")] public long? Revenue { get; set; }
 
     [JsonPropertyName("status")] public string? Status { get; set; }
 
