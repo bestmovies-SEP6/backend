@@ -28,4 +28,7 @@ public class PersonDto {
 
     [JsonPropertyName("known_for_department")]
     public string? Department { get; set; }
+    
+    [JsonPropertyName("popularity")]
+    public double Popularity { get; set; }
 }
