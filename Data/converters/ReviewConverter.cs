@@ -10,7 +10,7 @@ public static class ReviewConverter {
         return new ReviewEntity() {
             Id = reviewDto.Id,
             Author = reviewDto.Author,
-            AuthoredAt = DateTime.Now,
+            AuthoredAt = DateTime.UtcNow,
             MovieId = reviewDto.MovieId,
             Rating = reviewDto.Rating,
             ReviewDescription = reviewDto.ReviewDescription
