@@ -21,7 +21,7 @@ public class WishListsDao : IWishListsDao {
             WishListEntity wishListEntity = new WishListEntity() {
                 Username = loggedInUser,
                 MovieId = movieId,
-                WishListedAt = DateTime.Now
+                WishListedAt = DateTime.UtcNow
             };
 
             await _databaseContext.WishLists.AddAsync(wishListEntity);
