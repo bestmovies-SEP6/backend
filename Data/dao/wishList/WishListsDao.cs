@@ -1,4 +1,3 @@
-using System.Data;
 using Dto;
 using Entity;
 using EntityFramework.Exceptions.Common;
@@ -15,9 +14,6 @@ public class WishListsDao : IWishListsDao {
 
     public async Task AddMovieToWishList(string loggedInUser, int movieId) {
         try {
-            // UserEntity? userEntity = await _databaseContext.Users.FindAsync(loggedInUser);
-            // MovieEntity? movieEntity = await _databaseContext.Movies.FindAsync(movieId);
-
             WishListEntity wishListEntity = new WishListEntity() {
                 Username = loggedInUser,
                 MovieId = movieId,

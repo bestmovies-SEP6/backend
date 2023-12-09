@@ -15,14 +15,20 @@ public static class ErrorMessages {
     public const string LoginRequired = "You need to login to perform this action";
 
     // Wishlist errors
-    public const string MovieAlreadyInWishlist = "You already have this movie in your wishlist";
+    public const string MovieAlreadyInWishlist = "You already have this movie in your wishlists";
+    public const string MovieNotInWishlist = "You do not have provided movie inside your wishlists";
+
+
+    // Favorites errors
+    public const string MovieAlreadyInFavorites = "You already have this movie in your favorite list";
+public const string MovieNotInFavorites = "You do not have provided movie inside your favorite list";
 
 
     // Review errors
+
     public const string ReviewAlreadyExists =
         "You have already reviewed this movie, if you want to change your review please edit or delete the previous review";
 
-    public const string MovieNotInWishlist = "You do not have provided movie inside your wishlist";
     public const string InvalidPageOrPageSize = "Page and page size must be greater than 0";
     public const string ReviewNotFound = "Requested review not found";
 

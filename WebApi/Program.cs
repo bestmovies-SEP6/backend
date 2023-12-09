@@ -2,6 +2,7 @@ using System.Text;
 using ApiClient.api;
 using Data;
 using Data.dao.authentication;
+using Data.dao.favorites;
 using Data.dao.movies;
 using Data.dao.reviews;
 using Data.dao.wishList;
@@ -11,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Services;
 using Services.authentication;
+using Services.favorites;
 using Services.movie;
 using Services.person;
 using Services.reviews;
@@ -31,14 +33,16 @@ builder.Services.AddScoped<IReviewsService, ReviewsService>();
 
 builder.Services.AddScoped<IPeopleService, PeopleService>();
 builder.Services.AddScoped<IPersonService, PersonService>();
+builder.Services.AddScoped<IFavoritesService, FavoriteService>();
 builder.Services.AddMemoryCache();
 
 
 // DAOs
 builder.Services.AddScoped<IAuthDao, AuthDao>();
-builder.Services.AddScoped<IWishListsDao, WishListsDao>();
 builder.Services.AddScoped<IMoviesDao, MoviesDao>();
 builder.Services.AddScoped<IReviewsDao, ReviewsDao>();
+builder.Services.AddScoped<IWishListsDao, WishListsDao>();
+builder.Services.AddScoped<IFavoritesDao, FavoritesDao>();
 
 // HttpClients
 builder.Services.AddScoped<IMoviesClient, MoviesHttpClient>();

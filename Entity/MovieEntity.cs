@@ -9,5 +9,8 @@ public class MovieEntity {
     [DatabaseGenerated(DatabaseGeneratedOption.None)] // Do not auto-generate the primary key.
     public int Id { get; set; }
     public ICollection<WishListEntity>? WishLists { get; set; }
+    public ICollection<FavoriteEntity>? Favorites
+    
+    { get; set; }
     public ICollection<ReviewEntity>? Reviews { get; set; }
 }
