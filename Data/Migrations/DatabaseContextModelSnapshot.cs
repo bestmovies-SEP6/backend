@@ -22,6 +22,24 @@ namespace Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Entity.FavoriteEntity", b =>
+                {
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("FavoritedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("MovieId", "Username");
+
+                    b.HasIndex("Username");
+
+                    b.ToTable("Favorites");
+                });
+
             modelBuilder.Entity("Entity.MovieEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -101,6 +119,25 @@ namespace Data.Migrations
                     b.ToTable("WishLists");
                 });
 
+            modelBuilder.Entity("Entity.FavoriteEntity", b =>
+                {
+                    b.HasOne("Entity.MovieEntity", "Movie")
+                        .WithMany("Favorites")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entity.UserEntity", "User")
+                        .WithMany("Favorites")
+                        .HasForeignKey("Username")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Entity.ReviewEntity", b =>
                 {
                     b.HasOne("Entity.UserEntity", "User")
@@ -141,6 +178,8 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Entity.MovieEntity", b =>
                 {
+                    b.Navigation("Favorites");
+
                     b.Navigation("Reviews");
 
                     b.Navigation("WishLists");
@@ -148,6 +187,8 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Entity.UserEntity", b =>
                 {
+                    b.Navigation("Favorites");
+
                     b.Navigation("Reviews");
 
                     b.Navigation("WishLists");
