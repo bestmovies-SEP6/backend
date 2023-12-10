@@ -99,6 +99,9 @@ public class MoviesController : ControllerBase {
             Genres = genres
         };
         try {
+            if (query.Equals("null")) {
+                return BadRequest("Query is required");
+            }
             SearchMoviesResponse movies = await _moviesService.GetMovies(filterDto);
             return Ok(movies);
         }

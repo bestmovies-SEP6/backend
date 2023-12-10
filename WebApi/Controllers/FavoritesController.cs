@@ -54,10 +54,6 @@ public class FavoritesController : ControllerBase {
         }
 
     }
-
-
-
-
     private string GetLoggedInUser() {
         string? loggedInUser = User.Identity!.Name;
         if (string.IsNullOrEmpty(loggedInUser))
