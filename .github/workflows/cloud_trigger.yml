@@ -1,7 +1,7 @@
 name: Trigger cloud deployment
 on:
   push:
-    branches: [ "main", "cloud-trigger" ]
+    branches: [ "main", "cloud-trigger", "sachin" ]
 
 jobs:
   build-test-deploy:
@@ -30,7 +30,7 @@ jobs:
       - name: Code coverage report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
-          filename: coverage/**/coverage.cobertura.xml
+          filename: TestResults/**/coverage.cobertura.xml
           badge: true
           fail_below_min: true
           format: markdown
