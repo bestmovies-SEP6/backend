@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using ApiClient.api;
 using Dto;
 using Microsoft.Extensions.Caching.Memory;
@@ -15,7 +16,7 @@ public class MoviesService : IMoviesService {
 
     public MoviesService(IMoviesClient moviesClient, IMemoryCache cache) {
         _moviesClient = moviesClient;
-        _cache = cache;
+        _cache = cache ?? throw new ArgumentNullException(nameof(cache));
     }
 
     public Task<MovieDetailsDto> GetMovieDetailsById(int id) {
@@ -113,7 +114,7 @@ public class MoviesService : IMoviesService {
     }
 
 
-    // Get value from the cache
+    // These methods are made public only for testing purposes
     private T? GetValueFromCache<T>(string cacheKey) {
         _cache.TryGetValue(cacheKey, out T? valueFromCache);
         return valueFromCache;
@@ -125,7 +126,7 @@ public class MoviesService : IMoviesService {
         DateOnly today = DateOnly.FromDateTime(DateTime.Now);
 
         var dataToCache = new Tuple<List<MovieDto>, DateOnly>(nowPlaying, today);
-        _cache.Set(NowPlayingCacheKey, dataToCache);
+        SetCache(NowPlayingCacheKey, dataToCache);
     }
 
     private async Task RefreshTrendingCache() {
@@ -134,7 +135,7 @@ public class MoviesService : IMoviesService {
         DateOnly today = DateOnly.FromDateTime(DateTime.Now);
 
         var dataToCache = new Tuple<List<MovieDto>, DateOnly>(trending, today);
-        _cache.Set(TrendingCacheKey, dataToCache);
+        SetCache(TrendingCacheKey, dataToCache);
     }
 
     private async Task RefreshPopularCache() {
@@ -143,7 +144,7 @@ public class MoviesService : IMoviesService {
         DateOnly today = DateOnly.FromDateTime(DateTime.Now);
 
         var dataToCache = new Tuple<List<MovieDto>, DateOnly>(popular, today);
-        _cache.Set(PopularCacheKey, dataToCache);
+        SetCache(PopularCacheKey, dataToCache);
     }
 
     private async Task RefreshTopRatedCache() {
@@ -152,6 +153,10 @@ public class MoviesService : IMoviesService {
         DateOnly today = DateOnly.FromDateTime(DateTime.Now);
 
         var dataToCache = new Tuple<List<MovieDto>, DateOnly>(topRated, today);
-        _cache.Set(TopRatedCacheKey, dataToCache);
+        SetCache(TopRatedCacheKey, dataToCache);
+    }
+
+    private void SetCache(string cacheKey, object value) {
+        _cache.Set(cacheKey, value);
     }
 }
