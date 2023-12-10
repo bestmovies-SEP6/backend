@@ -26,19 +26,12 @@ jobs:
 
       - name: Test with dotnet
         run: dotnet test --collect:"XPlat Code Coverage"
-
-      - name: Code coverage report
-        uses: irongut/CodeCoverageSummary@v1.3.0
+        
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v2
         with:
-          filename: TestResults/**/coverage.cobertura.xml
-          badge: true
-          fail_below_min: true
-          format: markdown
-          hide_branch_rate: false
-          hide_complexity: true
-          indicators: true
-          output: both
-          thresholds: '60 80'
+          name: coverage-report
+          path: ./TestResults
 
       - name: Build Docker Image
         if: success()
