@@ -10,7 +10,7 @@ services:
         context: .
         dockerfile: Dockerfile
     environment:
-      - ConnectionStrings__DefaultConnection=Data Source=sep6.database.windows.net;Initial Catalog=bestmoviesdb;Persist Security Info=False;User ID=sachin;Password=Password1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
+      - ConnectionStrings__DefaultConnection=Server=tcp:bestmovies.database.windows.net,1433;Initial Catalog=bestmovies;Persist Security Info=False;User ID=sachin;Password=Password1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
       - ASPNETCORE_URLS=http://+:80
 
     

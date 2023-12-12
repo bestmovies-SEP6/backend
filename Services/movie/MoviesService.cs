@@ -121,7 +121,6 @@ public class MoviesService : IMoviesService {
     }
 
     private async Task RefreshNowPlayingCache() {
-        Console.WriteLine("Fetching now playing movies from api");
         List<MovieDto> nowPlaying = await _moviesClient.GetNowPlaying();
         DateOnly today = DateOnly.FromDateTime(DateTime.Now);
 
@@ -130,7 +129,6 @@ public class MoviesService : IMoviesService {
     }
 
     private async Task RefreshTrendingCache() {
-        Console.WriteLine("Fetching trending movies from api");
         List<MovieDto> trending = await _moviesClient.GetTrending();
         DateOnly today = DateOnly.FromDateTime(DateTime.Now);
 
@@ -139,7 +137,6 @@ public class MoviesService : IMoviesService {
     }
 
     private async Task RefreshPopularCache() {
-        Console.WriteLine("Fetching popular movies from api");
         List<MovieDto> popular = await _moviesClient.GetPopular();
         DateOnly today = DateOnly.FromDateTime(DateTime.Now);
 
@@ -148,7 +145,6 @@ public class MoviesService : IMoviesService {
     }
 
     private async Task RefreshTopRatedCache() {
-        Console.WriteLine("Fetching top rated movies from api");
         List<MovieDto> topRated = await _moviesClient.GetTopRated();
         DateOnly today = DateOnly.FromDateTime(DateTime.Now);
 
